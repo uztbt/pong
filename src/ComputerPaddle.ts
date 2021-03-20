@@ -10,28 +10,28 @@ export class ComputerPaddle extends Entity {
   }
 
   updateUv(ball: Ball, canvas: HTMLCanvasElement) {
-    if (ball.xuv === -1) {
-      this.yuv = 0;
+    if (ball.vx < 0) {
+      this.vy = 0;
       return;
     }
     if (ball.y < this.y) {
-      this.yuv = -1;
+      this.vy = -this.speed;
       if (this.y <= 20) {
-        this.yuv = 0;
+        this.vy = 0;
       }
     }
     else if (ball.y + ball.height > this.y + this.height) {
-      this.yuv = 1;
+      this.vy = this.speed;
       if (canvas.height - (this.y + this.height) <= 20) {
-        this.yuv = 0;
+        this.vy = 0;
       }
     } else {
-      this.yuv = 0;
+      this.vy = 0;
     }
   }
 
   update(ball: Ball, canvas: HTMLCanvasElement) {
     this.updateUv(ball, canvas);
-    this.y += this.yuv * this.speed;
+    this.y += this.vy;
   }
 }

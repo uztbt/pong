@@ -3,8 +3,8 @@ export class Entity {
   height: number;
   x: number;
   y: number;
-  xuv: number = 0; // Unit velocity a.k.a. direction of motion
-  yuv: number = 0;
+  vx: number = 0;
+  vy: number = 0;
 
   constructor(w: number, h: number, x: number, y: number) {
     this.width = w;

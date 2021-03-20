@@ -11,22 +11,22 @@ export class Paddle extends Entity{
 
   updateUv(canvas: HTMLCanvasElement){
     if (Game.keysPressed.ArrowUp) {
-      this.yuv = -1;
+      this.vy = -this.speed;
       if (this.y <= 20) {
-        this.yuv = 0;
+        this.vy = 0;
       }
     } else if (Game.keysPressed.ArrowDown) {
-      this.yuv = 1;
+      this.vy = this.speed;
       if (canvas.height - (this.y + this.height) <= 20) {
-        this.yuv = 0;
+        this.vy = 0;
       }
     } else {
-      this.yuv = 0;
+      this.vy = 0;
     }
   }
   
   update(canvas: HTMLCanvasElement) {
     this.updateUv(canvas);    
-    this.y += this.yuv * this.speed;
+    this.y += this.vy;
   }
 }
