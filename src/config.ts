@@ -12,7 +12,8 @@ export const config = {
   ball: {
     size: 10,
     speed: 8,
-    deltaAngle: Math.PI/8
+    deltaAngle: Math.PI/8,
+    acceleration: 1.02
   },
   wallOffset: 20
 };

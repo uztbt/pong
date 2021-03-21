@@ -9,11 +9,12 @@ import { Paddle } from "./Paddle";
 export class Ball extends Entity {
   private speed: number;
   private angle: number;
+  private acceleration: number;
   private lastHit: Entities | null;
   private boundLeftwardScale: (x: number) => number;
   private boundRightwardScale: (x: number) => number;
 
-  constructor(w: number, h: number, x: number, y: number, speed: number, deltaAngle: number) {
+  constructor(w: number, h: number, x: number, y: number, speed: number, deltaAngle: number, acceleration: number) {
     super(w, h, x, y);
     this.speed = speed;
     this.angle = Math.PI;// Ball.generateAngle();
@@ -25,6 +26,7 @@ export class Ball extends Entity {
     this.boundRightwardScale = scale(
       [-config.paddle.height/2-h/2, config.paddle.height/2+h/2],
       [Math.PI/2-deltaAngle, -Math.PI/2+deltaAngle]);
+    this.acceleration = acceleration;
   }
 
   private updateVels() {
@@ -67,6 +69,7 @@ export class Ball extends Entity {
       this.angle = this.boundLeftwardScale(dy);
     }
     this.updateVels();
+    this.speed *= this.acceleration;
   }
 
   private updateBasedOnCanvasBoundary(canvas: HTMLCanvasElement) {
