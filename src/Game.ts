@@ -14,8 +14,7 @@ export class Game {
   private static computerPlayer: ComputerPaddle;
   private static ballLaunchTimer: number;
   private static ball: Ball | null;
-  private static requestAnimationFrameHandler: number;
-
+  
   private constructor () {}
   static init() {
     Game.gameContext.font = "30px Orbitron";
@@ -91,7 +90,7 @@ export class Game {
       requestAnimationFrame(Ending.loop);
     } else {
       Game.draw();
-      Game.requestAnimationFrameHandler = requestAnimationFrame(Game.gameLoop);
+      requestAnimationFrame(Game.gameLoop);
     }
   }
 

@@ -6,13 +6,15 @@ export class Opening {
     private static canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
     private static context = Opening.canvas.getContext("2d") as CanvasRenderingContext2D;
     private static loopTimestamp: number;
+    private static elapsedFrame: number;
 
     static init() {
         Opening.context.font = "30px Orbitron";
+        Opening.elapsedFrame = 0;
     }
 
     private static update():boolean {
-        if (keysPressed.Enter) {
+        if (Opening.elapsedFrame > 60 && keysPressed.Enter) {
             Game.init();
             requestAnimationFrame(Game.gameLoop);
             return true;
@@ -39,6 +41,7 @@ export class Opening {
     static openingLoop(timestamp: number) {
         if (Opening.loopTimestamp === undefined || timestamp - Opening.loopTimestamp > config.secondsPerFrame) {
             Opening.loopTimestamp = timestamp;
+            Opening.elapsedFrame += 1;
             const moveToGame = Opening.update();
             if (moveToGame === false) {
                 Opening.draw();
