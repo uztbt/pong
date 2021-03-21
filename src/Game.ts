@@ -31,7 +31,7 @@ export class Game {
       config.computer.speed);
     Game.ball = new Ball(config.ball.size, config.ball.size,
       Game.gameCanvas.width/2-config.ball.size/2, Game.gameCanvas.height/2-config.ball.size/2,
-      config.ball.speed);
+      config.ball.speed, config.ball.deltaAngle);
   }
 
   static drawBoardDetails() {
@@ -82,6 +82,6 @@ export class Game {
     }
     Game.ball = new Ball(config.ball.size, config.ball.size,
       Game.gameCanvas.width/2-config.ball.size/2, Game.gameCanvas.height/2-config.ball.size/2,
-      config.ball.speed);
+      config.ball.speed, config.ball.deltaAngle);
   }
 }

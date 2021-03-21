@@ -1,6 +1,6 @@
 export const config = {
   paddle: {
-    width: 5,
+    width: 30,
     height: 60
   },
   player: {
@@ -11,7 +11,8 @@ export const config = {
   },
   ball: {
     size: 10,
-    speed: 8
+    speed: 8,
+    deltaAngle: Math.PI/8
   },
   wallOffset: 20
 };
