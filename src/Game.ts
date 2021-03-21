@@ -3,20 +3,27 @@ import { ComputerPaddle } from './ComputerPaddle';
 import { Ball } from "./Ball";
 import { Entities } from "./Entities";
 import { config } from "./config";
+import { Ending } from "./Ending";
 
 export class Game {
   private static gameCanvas = document.getElementById('game-canvas') as HTMLCanvasElement;
   private static gameContext = Game.gameCanvas.getContext("2d") as CanvasRenderingContext2D;
-  public static playerScore: number = 0;
-  public static computerScore: number = 0;
+  public static playerScore: number;
+  public static computerScore: number;
   private static player1: Paddle;
   private static computerPlayer: ComputerPaddle;
   private static ballLaunchTimer: number;
   private static ball: Ball | null;
+  private static requestAnimationFrameHandler: number;
 
   private constructor () {}
   static init() {
     Game.gameContext.font = "30px Orbitron";
+    Game.playerScore = 0;
+    Game.computerScore = 0;
+    Game.ballLaunchTimer = 0;
+    Game.ball = null;
+    
 
     Game.player1 = new Paddle(config.paddle.width, config.paddle.height,
       config.wallOffset, Game.gameCanvas.height/2 - config.paddle.height/2,
@@ -25,6 +32,7 @@ export class Game {
       Game.gameCanvas.width-(config.paddle.width + config.wallOffset), Game.gameCanvas.height/2-config.paddle.height/2,
       config.computer.speed);
     Game.scheduleBallLaunch(60);
+
   }
 
   static drawBoardDetails() {
@@ -44,7 +52,10 @@ export class Game {
     Game.gameContext.fillText(Game.computerScore.toString(), 390, 50);
   }
 
-  static update(){
+  static update(): boolean{
+    if (Game.playerScore >= config.gamePoint || Game.computerScore >= config.gamePoint) {
+      return true;
+    }
     Game.player1.update(Game.gameCanvas);
     if (Game.ball === null) {
       Game.ballLaunchTimer -= 1;
@@ -57,6 +68,7 @@ export class Game {
       Game.computerPlayer.update(Game.ball, Game.gameCanvas);
       Game.ball.update(Game.player1, Game.computerPlayer, Game.gameCanvas);
     }
+    return false;
   }
 
   static draw() {
@@ -73,9 +85,14 @@ export class Game {
   }
   
   static gameLoop() {
-    Game.update();
-    Game.draw();
-    requestAnimationFrame(Game.gameLoop);
+    const moveToEnding = Game.update();
+    if (moveToEnding) {
+      Ending.init(Game.playerScore, Game.computerScore);
+      requestAnimationFrame(Ending.loop);
+    } else {
+      Game.draw();
+      Game.requestAnimationFrameHandler = requestAnimationFrame(Game.gameLoop);
+    }
   }
 
   public static onScored(entity: Entities) {
