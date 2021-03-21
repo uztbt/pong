@@ -1,5 +1,5 @@
+import { keysPressed } from ".";
 import { Entity } from "./Entity";
-import { Game } from "./Game";
 
 export class Paddle extends Entity{
   private speed: number;
@@ -10,12 +10,12 @@ export class Paddle extends Entity{
   }
 
   updateUv(canvas: HTMLCanvasElement){
-    if (Game.keysPressed.ArrowUp) {
+    if (keysPressed.ArrowUp) {
       this.vy = -this.speed;
       if (this.y <= 20) {
         this.vy = 0;
       }
-    } else if (Game.keysPressed.ArrowDown) {
+    } else if (keysPressed.ArrowDown) {
       this.vy = this.speed;
       if (canvas.height - (this.y + this.height) <= 20) {
         this.vy = 0;

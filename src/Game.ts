@@ -9,7 +9,6 @@ import { config } from "./config";
 export class Game {
   private static gameCanvas = document.getElementById('game-canvas') as HTMLCanvasElement;
   private static gameContext = Game.gameCanvas.getContext("2d") as CanvasRenderingContext2D;
-  public static keysPressed: {[Key in InterceptKeys]: boolean} = {ArrowUp: false, ArrowDown: false};
   public static playerScore: number = 0;
   public static computerScore: number = 0;
   private static player1: Paddle;
@@ -19,9 +18,6 @@ export class Game {
   private constructor () {}
   static init() {
     Game.gameContext.font = "30px Orbitron";
-
-    window.addEventListener("keydown", registerKeyInput(true))
-    window.addEventListener("keyup", registerKeyInput(false))
 
     Game.player1 = new Paddle(config.paddle.width, config.paddle.height,
       config.wallOffset, Game.gameCanvas.height/2 - config.paddle.height/2,
