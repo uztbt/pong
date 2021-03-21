@@ -15,5 +15,6 @@ export const config = {
     deltaAngle: Math.PI/8,
     acceleration: 1.02
   },
-  wallOffset: 20
+  wallOffset: 20,
+  secondsPerFrame: 1000/60
 };

@@ -2,8 +2,6 @@ import { Paddle } from "./Paddle";
 import { ComputerPaddle } from './ComputerPaddle';
 import { Ball } from "./Ball";
 import { Entities } from "./Entities";
-import { InterceptKeys } from "./InterceptKeys";
-import { registerKeyInput } from "./keyEventListeners";
 import { config } from "./config";
 
 export class Game {
@@ -13,7 +11,8 @@ export class Game {
   public static computerScore: number = 0;
   private static player1: Paddle;
   private static computerPlayer: ComputerPaddle;
-  private static ball: Ball;
+  private static ballLaunchTimer: number;
+  private static ball: Ball | null;
 
   private constructor () {}
   static init() {
@@ -25,9 +24,7 @@ export class Game {
     Game.computerPlayer = new ComputerPaddle(config.paddle.width, config.paddle.height,
       Game.gameCanvas.width-(config.paddle.width + config.wallOffset), Game.gameCanvas.height/2-config.paddle.height/2,
       config.computer.speed);
-    Game.ball = new Ball(config.ball.size, config.ball.size,
-      Game.gameCanvas.width/2-config.ball.size/2, Game.gameCanvas.height/2-config.ball.size/2,
-      config.ball.speed, config.ball.deltaAngle, config.ball.acceleration);
+    Game.scheduleBallLaunch(60);
   }
 
   static drawBoardDetails() {
@@ -46,11 +43,22 @@ export class Game {
     Game.gameContext.fillText(Game.playerScore.toString(), 280, 50);
     Game.gameContext.fillText(Game.computerScore.toString(), 390, 50);
   }
+
   static update(){
     Game.player1.update(Game.gameCanvas);
-    Game.computerPlayer.update(Game.ball, Game.gameCanvas);
-    Game.ball.update(Game.player1, Game.computerPlayer, Game.gameCanvas);
+    if (Game.ball === null) {
+      Game.ballLaunchTimer -= 1;
+      if (Game.ballLaunchTimer <= 0) {
+        Game.ball = new Ball(config.ball.size, config.ball.size,
+          Game.gameCanvas.width/2-config.ball.size/2, Game.gameCanvas.height/2-config.ball.size/2,
+          config.ball.speed, config.ball.deltaAngle, config.ball.acceleration);
+      }
+    } else {
+      Game.computerPlayer.update(Game.ball, Game.gameCanvas);
+      Game.ball.update(Game.player1, Game.computerPlayer, Game.gameCanvas);
+    }
   }
+
   static draw() {
     // Fill the background in Black
     Game.gameContext.fillStyle = "#000";
@@ -59,8 +67,11 @@ export class Game {
     Game.drawBoardDetails();
     Game.player1.draw(Game.gameContext);
     Game.computerPlayer.draw(Game.gameContext);
-    Game.ball.draw(Game.gameContext);
+    if (Game.ball !== null) {
+      Game.ball.draw(Game.gameContext);
+    }
   }
+  
   static gameLoop() {
     Game.update();
     Game.draw();
@@ -76,8 +87,11 @@ export class Game {
         Game.computerScore += 1;
         break;
     }
-    Game.ball = new Ball(config.ball.size, config.ball.size,
-      Game.gameCanvas.width/2-config.ball.size/2, Game.gameCanvas.height/2-config.ball.size/2,
-      config.ball.speed, config.ball.deltaAngle, config.ball.acceleration);
+    Game.scheduleBallLaunch(60);
+  }
+
+  private static scheduleBallLaunch(frames: number) {
+    Game.ball = null;
+    Game.ballLaunchTimer = frames;
   }
 }

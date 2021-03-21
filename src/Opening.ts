@@ -1,9 +1,11 @@
 import { keysPressed } from ".";
+import { config } from "./config";
 import { Game } from "./Game";
 
 export class Opening {
     private static canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
     private static context = Opening.canvas.getContext("2d") as CanvasRenderingContext2D;
+    private static loopTimestamp: number;
 
     static init() {
         Opening.context.font = "30px Orbitron";
@@ -34,10 +36,15 @@ export class Opening {
             Opening.canvas.height*2/3-15);
     }
 
-    static openingLoop() {
-        const moveToGame = Opening.update();
-        if (moveToGame === false) {
-            Opening.draw();
+    static openingLoop(timestamp: number) {
+        if (Opening.loopTimestamp === undefined || timestamp - Opening.loopTimestamp > config.secondsPerFrame) {
+            Opening.loopTimestamp = timestamp;
+            const moveToGame = Opening.update();
+            if (moveToGame === false) {
+                Opening.draw();
+                requestAnimationFrame(Opening.openingLoop);
+            }
+        } else {
             requestAnimationFrame(Opening.openingLoop);
         }
     }
