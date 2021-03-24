@@ -1,13 +1,14 @@
 import { Paddle } from "./Paddle";
 import { ComputerPaddle } from './ComputerPaddle';
 import { Ball } from "./Ball";
-import { Entities } from "./Entities";
+import { Players } from "./Players";
 import { config } from "./config";
 import { Ending } from "./Ending";
 
 export class Game {
   private static gameCanvas = document.getElementById('game-canvas') as HTMLCanvasElement;
   private static gameContext = Game.gameCanvas.getContext("2d") as CanvasRenderingContext2D;
+  private static loopTimestamp: number;
   public static playerScore: number;
   public static computerScore: number;
   private static player1: Paddle;
@@ -18,12 +19,12 @@ export class Game {
   private constructor () {}
   static init() {
     Game.gameContext.font = "30px Orbitron";
+    Game.loopTimestamp = 0;
     Game.playerScore = 0;
     Game.computerScore = 0;
     Game.ballLaunchTimer = 0;
     Game.ball = null;
     
-
     Game.player1 = new Paddle(config.paddle.width, config.paddle.height,
       config.wallOffset, Game.gameCanvas.height/2 - config.paddle.height/2,
       config.player.speed);
@@ -83,23 +84,26 @@ export class Game {
     }
   }
   
-  static gameLoop() {
+  static loop(timestamp: number) {
+    if (timestamp - Game.loopTimestamp <= config.secondsPerFrame) {
+      return requestAnimationFrame(Game.loop);
+    }
     const moveToEnding = Game.update();
     if (moveToEnding) {
       Ending.init(Game.playerScore, Game.computerScore);
       requestAnimationFrame(Ending.loop);
     } else {
       Game.draw();
-      requestAnimationFrame(Game.gameLoop);
+      requestAnimationFrame(Game.loop);
     }
   }
 
-  public static onScored(entity: Entities) {
+  public static onScored(entity: Players) {
     switch (entity) {
-      case Entities.PLAYER:
+      case Players.PLAYER:
         Game.playerScore += 1;
         break;
-      case Entities.COMPUTER:
+      case Players.COMPUTER:
         Game.computerScore += 1;
         break;
     }

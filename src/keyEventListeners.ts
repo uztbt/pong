@@ -1,12 +1,15 @@
-import { keysPressed } from ".";
+import { userInput } from ".";
 
 export const registerKeyInput = (isKeyDown: boolean) => (e:KeyboardEvent) => {
   switch(e.key) {
     case "ArrowUp":
-      keysPressed.ArrowUp = isKeyDown;
+      userInput.ArrowUp = isKeyDown;
+      break;
     case "ArrowDown":
-      keysPressed.ArrowDown = isKeyDown;
+      userInput.ArrowDown = isKeyDown;
+      break;
     case "Enter":
-      keysPressed.Enter = isKeyDown;
+      userInput.Enter = isKeyDown;
+      break;
   }
 }

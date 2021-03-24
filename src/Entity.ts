@@ -1,4 +1,4 @@
-export class Entity {
+export abstract class Entity {
   width: number;
   height: number;
   x: number;

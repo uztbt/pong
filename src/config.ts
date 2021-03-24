@@ -16,6 +16,6 @@ export const config = {
     acceleration: 1.02
   },
   wallOffset: 20,
-  secondsPerFrame: 1000/60,
+  secondsPerFrame: 1000/70,
   gamePoint: 3,
 };

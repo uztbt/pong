@@ -1,0 +1,95 @@
+@startuml
+
+' class index {
+'   userInput
+' }
+
+' note bottom of index
+' Connected to
+' window.addEventListener()
+' end note
+
+' class config {
+
+' }
+
+' enum Players {
+'   PLAYER
+'   COMPUTER
+' }
+
+
+class Opening {
+  init()
+  update(): boolean
+  draw()
+  loop(timestamp)
+}
+
+class Game {
+  playerScore
+  computerScore
+  ballLaunchTimer
+  onScored(entity)
+  scheduleBallLaunch(frames)
+  init()
+  update(): boolean
+  draw()
+  loop(timestamp)
+}
+
+class Paddle {
+  speed
+  updateVelocity(canvas)
+  update(canvas)
+}
+
+class ComputerPaddle {
+  speed
+  updateVelocity(canvas)
+  update(ball, canvas)
+}
+
+class Ball {
+  speed, acceleration
+  angle, deltaAngle
+  lastHitBy
+  boundLeftwardScale()
+  boundRightwardScale()
+  updateVelocity()
+  randomAngle()
+  ' flipHorizontally()
+  ' boundByCollision(paddle)
+  updateBasedOnCanvasBoundary(canvas)
+  updateBasedOnCollision(paddle, computer)
+  update(player, computer, canvas)
+}
+
+class Ending {
+  playerScore
+  computerScore
+  init(playerScore, computerScore)
+  update(): boolean
+  draw()
+  loop(timestamp)
+}
+
+abstract Entity {
+  width, height
+  x, y
+  vx, vy
+  draw(context)
+}
+
+Opening .> Game
+Game .> Ending
+Ending .> Opening
+
+Game *--- Paddle
+Game *--- ComputerPaddle
+Game *--- Ball
+
+Entity <|-- Paddle
+Entity <|-- ComputerPaddle
+Entity <|-- Ball
+@enduml

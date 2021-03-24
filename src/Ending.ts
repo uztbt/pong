@@ -1,4 +1,4 @@
-import { keysPressed } from ".";
+import { userInput } from ".";
 import { config } from "./config";
 import { Opening } from "./Opening";
 
@@ -10,15 +10,16 @@ export class Ending {
   private static computerScore: number;
 
   static init(playerScore: number, computerScore: number) {
+    Ending.loopTimestamp = 0;
     Ending.playerScore = playerScore;
     Ending.computerScore = computerScore;
     Ending.context.font = "30px Orbitron";
   }
 
   private static update():boolean {
-    if (keysPressed.Enter) {
+    if (userInput.Enter) {
         Opening.init();
-        requestAnimationFrame(Opening.openingLoop);
+        requestAnimationFrame(Opening.loop);
         return true;
     }
     return false;
@@ -40,7 +41,7 @@ export class Ending {
   }
 
   static loop(timestamp: number) {
-    if (Ending.loopTimestamp === undefined || timestamp - Ending.loopTimestamp > config.secondsPerFrame) {
+    if (timestamp - Ending.loopTimestamp > config.secondsPerFrame) {
         Ending.loopTimestamp = timestamp;
         const moveToOpening = Ending.update();
         if (moveToOpening === false) {

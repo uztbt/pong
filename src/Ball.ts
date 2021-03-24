@@ -1,6 +1,6 @@
 import { ComputerPaddle } from "./ComputerPaddle";
 import { config } from "./config";
-import { Entities } from "./Entities";
+import { Players } from "./Players";
 import { Entity } from "./Entity";
 import { Game } from "./Game";
 import { scale } from "./helpers";
@@ -11,7 +11,7 @@ export class Ball extends Entity {
   private angle: number;
   private deltaAngle: number;
   private acceleration: number;
-  private lastHit: Entities | null;
+  private lastHitBy: Players | null;
   private boundLeftwardScale: (x: number) => number;
   private boundRightwardScale: (x: number) => number;
 
@@ -19,9 +19,9 @@ export class Ball extends Entity {
     super(w, h, x, y);
     this.speed = speed;
     this.deltaAngle = deltaAngle;
-    this.angle = this.generateAngle();
-    this.lastHit = null;
-    this.updateVels();
+    this.angle = this.randomAngle();
+    this.lastHitBy = null;
+    this.updateVelocity();
     this.boundLeftwardScale = scale(
       [-config.paddle.height/2-h/2, config.paddle.height/2+h/2],
       [Math.PI/2+deltaAngle, Math.PI*3/2-deltaAngle]);
@@ -31,7 +31,7 @@ export class Ball extends Entity {
     this.acceleration = acceleration;
   }
 
-  private updateVels() {
+  private updateVelocity() {
     const uvx = Math.cos(this.angle);
     // The negation below is very important because the y-axis of the canvas is the opposite of
     // that of the normal cartesian system, which I used to calculate the reflection.
@@ -40,10 +40,10 @@ export class Ball extends Entity {
     this.vy = this.speed*uvy;
   }
 
-  private generateAngle():number {
+  private randomAngle():number {
     const a = Math.PI*(Math.random()-0.5);
     if (a>Math.PI/2-this.deltaAngle || a<-Math.PI/2+this.deltaAngle) {
-      return this.generateAngle()
+      return this.randomAngle()
     } else {
       return a;
     }
@@ -51,12 +51,12 @@ export class Ball extends Entity {
 
   private flipHorizontally() {
     this.angle = 2*Math.PI-this.angle;
-    this.updateVels();
+    this.updateVelocity();
   }
 
   private flipVertically() {
     this.angle = Math.PI-this.angle;
-    this.updateVels();
+    this.updateVelocity();
   }
 
   private boundByCollision(paddle: Entity) {
@@ -69,7 +69,7 @@ export class Ball extends Entity {
     } else {
       this.angle = this.boundLeftwardScale(dy);
     }
-    this.updateVels();
+    this.updateVelocity();
     this.speed *= this.acceleration;
   }
 
@@ -83,28 +83,28 @@ export class Ball extends Entity {
     }
 
     if (this.x <= 0) {
-      Game.onScored(Entities.COMPUTER);
+      Game.onScored(Players.COMPUTER);
     }
 
     if(this.x + this.width >= canvas.width) {
-      Game.onScored(Entities.PLAYER);
+      Game.onScored(Players.PLAYER);
     }
   }
 
   updateBasedOnCollision(player: Paddle, computer: ComputerPaddle) {
     if (player.x <= this.x && this.x <= player.x + player.width) {
       if (this.y <= player.y+player.height && this.y + this.height >= player.y) {
-        if (this.lastHit !== Entities.PLAYER) {
+        if (this.lastHitBy !== Players.PLAYER) {
           this. boundByCollision(player);
-          this.lastHit = Entities.PLAYER;
+          this.lastHitBy = Players.PLAYER;
         }
       }
     }
     if (computer.x <= this.x + this.width && this.x <= computer.x + computer.width) {
       if (this.y <= computer.y+computer.height && this.y + this.height >= computer.y) {
-        if (this.lastHit !== Entities.COMPUTER) {
+        if (this.lastHitBy !== Players.COMPUTER) {
           this.boundByCollision(computer);
-          this.lastHit = Entities.COMPUTER;
+          this.lastHitBy = Players.COMPUTER;
         }
       }
     }

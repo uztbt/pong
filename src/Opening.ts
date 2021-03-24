@@ -1,4 +1,4 @@
-import { keysPressed } from ".";
+import { userInput } from ".";
 import { config } from "./config";
 import { Game } from "./Game";
 
@@ -10,13 +10,14 @@ export class Opening {
 
     static init() {
         Opening.context.font = "30px Orbitron";
+        Opening.loopTimestamp = 0;
         Opening.elapsedFrame = 0;
     }
 
     private static update():boolean {
-        if (Opening.elapsedFrame > 60 && keysPressed.Enter) {
+        if (Opening.elapsedFrame > 60 && userInput.Enter) {
             Game.init();
-            requestAnimationFrame(Game.gameLoop);
+            requestAnimationFrame(Game.loop);
             return true;
         }
         return false;
@@ -38,17 +39,16 @@ export class Opening {
             Opening.canvas.height*2/3-15);
     }
 
-    static openingLoop(timestamp: number) {
-        if (Opening.loopTimestamp === undefined || timestamp - Opening.loopTimestamp > config.secondsPerFrame) {
-            Opening.loopTimestamp = timestamp;
-            Opening.elapsedFrame += 1;
-            const moveToGame = Opening.update();
-            if (moveToGame === false) {
-                Opening.draw();
-                requestAnimationFrame(Opening.openingLoop);
-            }
-        } else {
-            requestAnimationFrame(Opening.openingLoop);
+    static loop(timestamp: number) {
+        if (timestamp - Opening.loopTimestamp <= config.secondsPerFrame) {
+            return requestAnimationFrame(Opening.loop);
+        }
+        Opening.loopTimestamp = timestamp;
+        Opening.elapsedFrame += 1;
+        const moveToGame = Opening.update();
+        if (moveToGame === false) {
+            Opening.draw();
+            requestAnimationFrame(Opening.loop);
         }
     }
 }

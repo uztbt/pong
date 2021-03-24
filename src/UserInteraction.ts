@@ -1,5 +1,5 @@
 // c.f. KeyboardEvent.key
-export enum InterceptKeys {
+export enum UserInteraction {
   UP = "ArrowUp",
   DOWN = "ArrowDown",
   ENTER = "Enter"

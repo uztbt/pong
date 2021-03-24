@@ -1,4 +1,4 @@
-import { keysPressed } from ".";
+import { userInput } from ".";
 import { Entity } from "./Entity";
 
 export class Paddle extends Entity{
@@ -9,13 +9,13 @@ export class Paddle extends Entity{
     this.speed = speed;
   }
 
-  updateUv(canvas: HTMLCanvasElement){
-    if (keysPressed.ArrowUp) {
+  updateVelocity(canvas: HTMLCanvasElement){
+    if (userInput.ArrowUp) {
       this.vy = -this.speed;
       if (this.y <= 20) {
         this.vy = 0;
       }
-    } else if (keysPressed.ArrowDown) {
+    } else if (userInput.ArrowDown) {
       this.vy = this.speed;
       if (canvas.height - (this.y + this.height) <= 20) {
         this.vy = 0;
@@ -26,7 +26,7 @@ export class Paddle extends Entity{
   }
   
   update(canvas: HTMLCanvasElement) {
-    this.updateUv(canvas);    
+    this.updateVelocity(canvas);    
     this.y += this.vy;
   }
 }
