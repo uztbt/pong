@@ -23,4 +23,4 @@ jobs:
         with:
           credentials: ${{ secrets.gcp_credentials }}
           path: ./dist/pong.js
-          destination: yuji-ghost-javascript/pong.js
+          destination: yuji-ghost-javascript
