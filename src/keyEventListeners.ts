@@ -12,4 +12,5 @@ export const registerKeyInput = (isKeyDown: boolean) => (e:KeyboardEvent) => {
       userInput.Enter = isKeyDown;
       break;
   }
+  e.preventDefault();
 }

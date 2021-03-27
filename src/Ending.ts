@@ -31,8 +31,8 @@ export class Ending {
       Ending.context.fillRect(0, 0, Ending.canvas.width, Ending.canvas.height);
 
       Ending.context.fillStyle = "#fff"
-      const resultMessage = Ending.computerScore < Ending.playerScore ? "YOU WIN!" : "YOU LOSE";
-      Ending.context.fillText(resultMessage, Ending.canvas.width/2-105, Ending.canvas.height/2-45);
+      const resultMessage = Ending.computerScore < Ending.playerScore ? "YOU WIN" : "YOU LOSE";
+      Ending.context.fillText(resultMessage, Ending.canvas.width/2-90, Ending.canvas.height/2-45);
       Ending.context.fillText(`${Ending.playerScore} - ${Ending.computerScore}`, Ending.canvas.width/2-45, Ending.canvas.height/2);
       Ending.context.fillText(
           "PRESS ENTER",
