@@ -1,7 +1,7 @@
 import { userInput } from ".";
 import { Entity } from "./Entity";
 
-export class Paddle extends Entity{
+export class Paddle extends Entity {
   private speed: number;
 
   constructor(w: number, h: number, x: number, y: number, speed: number) {
@@ -9,7 +9,7 @@ export class Paddle extends Entity{
     this.speed = speed;
   }
 
-  updateVelocity(canvas: HTMLCanvasElement){
+  updateVelocity(canvas: HTMLCanvasElement): void {
     if (userInput.ArrowUp) {
       this.vy = -this.speed;
       if (this.y <= 20) {
@@ -24,9 +24,9 @@ export class Paddle extends Entity{
       this.vy = 0;
     }
   }
-  
-  update(canvas: HTMLCanvasElement) {
-    this.updateVelocity(canvas);    
+
+  update(canvas: HTMLCanvasElement): void {
+    this.updateVelocity(canvas);
     this.y += this.vy;
   }
 }

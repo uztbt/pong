@@ -1,7 +1,9 @@
 import { userInput } from ".";
 
-export const registerKeyInput = (isKeyDown: boolean) => (e:KeyboardEvent) => {
-  switch(e.key) {
+export const registerKeyInput = (isKeyDown: boolean) => (
+  e: KeyboardEvent
+): void => {
+  switch (e.key) {
     case "ArrowUp":
       userInput.ArrowUp = isKeyDown;
       break;
@@ -13,4 +15,4 @@ export const registerKeyInput = (isKeyDown: boolean) => (e:KeyboardEvent) => {
       break;
   }
   e.preventDefault();
-}
+};

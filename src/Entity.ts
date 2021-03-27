@@ -3,8 +3,8 @@ export abstract class Entity {
   height: number;
   x: number;
   y: number;
-  vx: number = 0;
-  vy: number = 0;
+  vx = 0;
+  vy = 0;
 
   constructor(w: number, h: number, x: number, y: number) {
     this.width = w;
@@ -13,8 +13,8 @@ export abstract class Entity {
     this.y = y;
   }
 
-  draw(context: CanvasRenderingContext2D) {
-    context.fillStyle = "#fff"
+  draw(context: CanvasRenderingContext2D): void {
+    context.fillStyle = "#fff";
     context.fillRect(this.x, this.y, this.width, this.height);
   }
 }

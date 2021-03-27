@@ -9,7 +9,7 @@ export class ComputerPaddle extends Entity {
     this.speed = speed;
   }
 
-  updateVelocity(ball: Ball, canvas: HTMLCanvasElement) {
+  updateVelocity(ball: Ball, canvas: HTMLCanvasElement): void {
     if (ball.vx < 0) {
       this.vy = 0;
       return;
@@ -19,8 +19,7 @@ export class ComputerPaddle extends Entity {
       if (this.y <= 20) {
         this.vy = 0;
       }
-    }
-    else if (ball.y + ball.height > this.y + this.height) {
+    } else if (ball.y + ball.height > this.y + this.height) {
       this.vy = this.speed;
       if (canvas.height - (this.y + this.height) <= 20) {
         this.vy = 0;
@@ -30,7 +29,7 @@ export class ComputerPaddle extends Entity {
     }
   }
 
-  update(ball: Ball, canvas: HTMLCanvasElement) {
+  update(ball: Ball, canvas: HTMLCanvasElement): void {
     this.updateVelocity(ball, canvas);
     this.y += this.vy;
   }

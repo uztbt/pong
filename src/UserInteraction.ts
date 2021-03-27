@@ -2,5 +2,5 @@
 export enum UserInteraction {
   UP = "ArrowUp",
   DOWN = "ArrowDown",
-  ENTER = "Enter"
+  ENTER = "Enter",
 }
