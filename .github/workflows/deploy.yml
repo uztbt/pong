@@ -1,0 +1,26 @@
+name: Deploy
+
+on: push
+
+jobs:
+  deploy:
+    name: Deploy to the GCS bucket
+    runs-on: ubuntu-latest
+    steps:
+      # Checks out a copy of my repository to the ubuntu machine
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: GitHub Action for Yarn
+        uses: Borales/actions-yarn@v2.3.0
+        with:
+          cmd: install
+      - name: GitHub Action for Yarn
+        uses: Borales/actions-yarn@v2.3.0
+        with:
+          cmd: build
+      - name: Cloud Storage Uploader
+        uses: google-github-actions/upload-cloud-storage@v0.2.0
+        with:
+          credentials: ${{ secrets.gcp_credentials }}
+          path: ../../dist/pong.js
+          destination: yuji-ghost-javascript/pong.js
