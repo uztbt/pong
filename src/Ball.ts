@@ -3,8 +3,15 @@ import { config } from "./config";
 import { Players } from "./Players";
 import { Entity } from "./Entity";
 import { Game } from "./Game";
-import { scale } from "./helpers";
 import { Paddle } from "./Paddle";
+
+function scale([x1, x2]: [number, number], [y1, y2]: [number, number]) {
+  return (x: number): number => {
+    const a = (y1 - y2) / (x1 - x2);
+    const b = y1 - a * x1;
+    return a * x + b;
+  }
+};
 
 export class Ball extends Entity {
   private speed: number;

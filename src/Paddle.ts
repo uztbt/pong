@@ -10,12 +10,12 @@ export class Paddle extends Entity {
   }
 
   updateVelocity(canvas: HTMLCanvasElement): void {
-    if (UserControl.dict[Command.UP]) {
+    if (this.willGoUp()) {
       this.vy = -this.speed;
       if (this.y <= 20) {
         this.vy = 0;
       }
-    } else if (UserControl.dict[Command.DOWN]) {
+    } else if (this.willGoDown()) {
       this.vy = this.speed;
       if (canvas.height - (this.y + this.height) <= 20) {
         this.vy = 0;
@@ -28,5 +28,31 @@ export class Paddle extends Entity {
   update(canvas: HTMLCanvasElement): void {
     this.updateVelocity(canvas);
     this.y += this.vy;
+  }
+
+  willGoUp(): boolean {
+    if (UserControl.dict[Command.UP]){
+      return true;
+    }
+    const moveCommandOn = UserControl.dict[Command.MOVE];
+    const touchY = UserControl.ongoingTouch?.clientY;
+    if (moveCommandOn && touchY !== undefined &&
+      touchY < this.y + this.height/2 -10) {
+      return true;
+    }
+    return false;
+  }
+
+  willGoDown(): boolean {
+    if (UserControl.dict[Command.DOWN]){
+      return true;
+    }
+    const moveCommandOn = UserControl.dict[Command.MOVE];
+    const touchY = UserControl.ongoingTouch?.clientY;
+    if (moveCommandOn && touchY !== undefined &&
+      touchY > this.y + this.height/2 +10) {
+      return true;
+    }
+    return false;
   }
 }
