@@ -18,15 +18,19 @@
 '   COMPUTER
 ' }
 
+Entity UserControl {
+  dict
+  init()
+}
 
-class Opening {
+entity Opening {
   init()
   update(): boolean
   draw()
   loop(timestamp)
 }
 
-class Game {
+entity Game {
   playerScore
   computerScore
   ballLaunchTimer
@@ -65,7 +69,11 @@ class Ball {
   update(player, computer, canvas)
 }
 
-class Ending {
+class SideLine {
+  topOrBottom
+}
+
+entity Ending {
   playerScore
   computerScore
   init(playerScore, computerScore)
@@ -91,5 +99,11 @@ Game *--- Ball
 
 Entity <|-- Paddle
 Entity <|-- ComputerPaddle
+Entity <|-- SideLine
 Entity <|-- Ball
+
+UserControl <.. Paddle: <<Use>>
+JSON ..> UserControl 
+keyDownEvent ..> UserControl
+touchEvent ..> UserControl
 @enduml

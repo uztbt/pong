@@ -1,6 +1,6 @@
-import { userInput } from ".";
 import { config } from "./config";
 import { Game } from "./Game";
+import { Command, UserControl } from "./UserControl";
 
 export class Opening {
   private static canvas = document.getElementById(
@@ -19,7 +19,7 @@ export class Opening {
   }
 
   private static update(): boolean {
-    if (Opening.elapsedFrame > 60 && userInput.Enter) {
+    if (Opening.elapsedFrame > 10 && UserControl.dict[Command.ENTER]) {
       Game.init();
       requestAnimationFrame(Game.loop);
       return true;

@@ -1,6 +1,6 @@
-import { userInput } from ".";
 import { config } from "./config";
 import { Opening } from "./Opening";
+import { Command, UserControl } from "./UserControl";
 
 export class Ending {
   private static canvas = document.getElementById(
@@ -21,7 +21,7 @@ export class Ending {
   }
 
   private static update(): boolean {
-    if (userInput.Enter) {
+    if (UserControl.dict[Command.ENTER]) {
       Opening.init();
       requestAnimationFrame(Opening.loop);
       return true;
