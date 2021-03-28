@@ -63,8 +63,8 @@ export class Game {
     }
 
     // draw scores
-    Game.gameContext.fillText(Game.playerScore.toString(), 280, 50);
-    Game.gameContext.fillText(Game.computerScore.toString(), 390, 50);
+    Game.gameContext.fillText(Game.playerScore.toString(), Game.gameCanvas.width/2-50, 50);
+    Game.gameContext.fillText(Game.computerScore.toString(), Game.gameCanvas.width/2+20, 50);
   }
 
   static update(): boolean {
