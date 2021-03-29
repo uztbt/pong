@@ -7,7 +7,7 @@ function detectMob() {
 }
 
 if (detectMob()) {
-  const buttons = document.getElementById("up-down-buttons") as HTMLDivElement;
+  const buttons = document.getElementById("control-buttons") as HTMLDivElement;
   buttons.hidden = false;
 }
 UserControl.init();
