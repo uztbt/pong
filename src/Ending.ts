@@ -10,6 +10,7 @@ export class Ending {
     "2d"
   ) as CanvasRenderingContext2D;
   private static loopTimestamp: number;
+  private static elapsedFrame: number;
   private static playerScore: number;
   private static computerScore: number;
 
@@ -18,10 +19,11 @@ export class Ending {
     Ending.playerScore = playerScore;
     Ending.computerScore = computerScore;
     Ending.context.font = "30px Orbitron";
+    Ending.elapsedFrame = 0;
   }
 
   private static update(): boolean {
-    if (UserControl.dict[Command.ENTER]) {
+    if (Ending.elapsedFrame > 30 && UserControl.dict[Command.ENTER]) {
       Opening.init();
       requestAnimationFrame(Opening.loop);
       return true;
@@ -57,6 +59,7 @@ export class Ending {
   static loop(timestamp: number): void {
     if (timestamp - Ending.loopTimestamp > config.secondsPerFrame) {
       Ending.loopTimestamp = timestamp;
+      Ending.elapsedFrame += 1;
       const moveToOpening = Ending.update();
       if (moveToOpening === false) {
         Ending.draw();
