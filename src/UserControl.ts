@@ -14,7 +14,6 @@ export class UserControl {
             [Command.ENTER]: false,
             [Command.MOVE]: false
         };
-        // UserControl.ongoingTouch = undefined
         document.addEventListener("DOMContentLoaded", () => {
             document.addEventListener("keydown", UserControl.registerKeyInput(true));
             document.addEventListener("keyup", UserControl.registerKeyInput(false));
