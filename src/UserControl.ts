@@ -70,26 +70,26 @@ export class UserControl {
         UserControl.dict[Command.ENTER] = false;
     }
 
-    // private static handleTouchStart(event: TouchEvent) {
-    //     event.preventDefault();
-    //     const touch = event.changedTouches[0];
-    //     UserControl.ongoingTouch = {
-    //         identifier: touch.identifier,
-    //         clientX: touch.clientX,
-    //         clientY: touch.clientY
-    //     };
-    //     UserControl.dict[Command.MOVE] = true;
-    //     UserControl.dict[Command.ENTER] = true;
-    // }
+    private static handleTouchStart(event: TouchEvent) {
+        event.preventDefault();
+        const touch = event.changedTouches[0];
+        UserControl.ongoingTouch = {
+            identifier: touch.identifier,
+            clientX: touch.clientX,
+            clientY: touch.clientY
+        };
+        UserControl.dict[Command.MOVE] = true;
+        UserControl.dict[Command.ENTER] = true;
+    }
 
-    // private static handleTouchEnd(event: TouchEvent) {
-    //     event.preventDefault();
-    //     UserControl.ongoingTouch = undefined;
-    //     // UserControl.dict[Command.UP] = false;
-    //     // UserControl.dict[Command.DOWN] = false;
-    //     UserControl.dict[Command.MOVE] = false;
-    //     UserControl.dict[Command.ENTER] = false;
-    // }
+    private static handleTouchEnd(event: TouchEvent) {
+        event.preventDefault();
+        UserControl.ongoingTouch = undefined;
+        // UserControl.dict[Command.UP] = false;
+        // UserControl.dict[Command.DOWN] = false;
+        UserControl.dict[Command.MOVE] = false;
+        UserControl.dict[Command.ENTER] = false;
+    }
 
     private static handleTouchMove(event: TouchEvent) {
         event.preventDefault();
