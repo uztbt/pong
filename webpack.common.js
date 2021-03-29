@@ -20,6 +20,7 @@ module.exports = {
   },
   output: {
     filename: 'pong.js',
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'dist', 'javascript'),
+    clean: true
   }
 }

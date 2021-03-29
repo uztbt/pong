@@ -1,3 +1,3 @@
 .vscode
 node_modules
-dist/pong.js
+dist/javascript/pong.js
