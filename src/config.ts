@@ -4,7 +4,7 @@ export const config = {
     height: 60,
   },
   player: {
-    speed: 5,
+    speed: 7,
   },
   computer: {
     speed: 7,

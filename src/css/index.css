@@ -1,8 +1,15 @@
 body {
   text-align: center;
 }
+
+#game-wrapper{
+  width: 390px;
+}
 canvas{
   display: block;
   margin: 0px auto;
   background: black;
+}
+#up-down-buttons {
+  padding-top: 10px;
 }
