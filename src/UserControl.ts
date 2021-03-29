@@ -49,21 +49,25 @@ export class UserControl {
     private static handleTouchUpArrowStart(event: TouchEvent) {
         event.preventDefault();
         UserControl.dict[Command.UP] = true;
+        UserControl.dict[Command.ENTER] = true;
     }
 
     private static handleTouchUpArrowEnd(event: TouchEvent) {
         event.preventDefault();
         UserControl.dict[Command.UP] = false;
+        UserControl.dict[Command.ENTER] = false;
     }
 
     private static handleTouchDownArrowStart(event: TouchEvent) {
         event.preventDefault();
         UserControl.dict[Command.DOWN] = true;
+        UserControl.dict[Command.ENTER] = true;
     }
 
     private static handleTouchDownArrowEnd(event: TouchEvent) {
         event.preventDefault();
         UserControl.dict[Command.DOWN] = false;
+        UserControl.dict[Command.ENTER] = false;
     }
 
     private static handleTouchStart(event: TouchEvent) {
