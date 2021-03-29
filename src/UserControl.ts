@@ -18,12 +18,15 @@ export class UserControl {
         document.addEventListener("DOMContentLoaded", () => {
             document.addEventListener("keydown", UserControl.registerKeyInput(true));
             document.addEventListener("keyup", UserControl.registerKeyInput(false));
-            
-            const canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
-            canvas.addEventListener("touchstart", UserControl.handleTouchStart, false);
-            canvas.addEventListener("touchend", UserControl.handleTouchEnd, false);
-            // canvas.addEventListener("touchcancel", handleCancel, false);
-            canvas.addEventListener("touchmove", UserControl.handleTouchMove, false);     
+
+            const upArrow = document.getElementById("up-arrow") as HTMLImageElement;
+            const downArrow = document.getElementById("down-arrow") as HTMLImageElement;
+            if (upArrow !== null && downArrow !== null) {
+                upArrow.addEventListener("touchstart", this.handleTouchUpArrowStart);
+                upArrow.addEventListener("touchend", this.handleTouchUpArrowEnd);
+                downArrow.addEventListener("touchstart", this.handleTouchDownArrowStart);
+                downArrow.addEventListener("touchend", this.handleTouchDownArrowEnd);
+            }
         });
     }
     
@@ -42,6 +45,26 @@ export class UserControl {
                 break;
             }
         }
+    }
+
+    private static handleTouchUpArrowStart(event: TouchEvent) {
+        event.preventDefault();
+        UserControl.dict[Command.UP] = true;
+    }
+
+    private static handleTouchUpArrowEnd(event: TouchEvent) {
+        event.preventDefault();
+        UserControl.dict[Command.UP] = false;
+    }
+
+    private static handleTouchDownArrowStart(event: TouchEvent) {
+        event.preventDefault();
+        UserControl.dict[Command.DOWN] = true;
+    }
+
+    private static handleTouchDownArrowEnd(event: TouchEvent) {
+        event.preventDefault();
+        UserControl.dict[Command.DOWN] = false;
     }
 
     private static handleTouchStart(event: TouchEvent) {

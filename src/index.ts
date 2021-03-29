@@ -2,11 +2,7 @@ import './css/index.css'
 import { Opening } from "./Opening";
 import { UserControl } from "./UserControl";
 
-function detectMob() {
-  return ( ( window.innerWidth <= 1000 ) && ( window.innerHeight <= 1000 ) );
-}
-console.info(innerWidth, innerHeight)
-if (detectMob()) {
+if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
   const buttons = document.getElementById("control-buttons");
   console.log("detected as mobile")
   if (buttons !== null) {
