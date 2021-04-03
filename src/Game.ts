@@ -1,24 +1,23 @@
-import { Paddle } from "./Paddle";
-import { ComputerPaddle } from "./ComputerPaddle";
+import { followBall, fromUserInput, Paddle } from "./Paddle";
 import { Ball } from "./Ball";
 import { Players } from "./Players";
 import { config } from "./config";
 import { Ending } from "./Ending";
 
 export class Game {
-  private static gameCanvas = document.getElementById(
+  static gameCanvas = document.getElementById(
     "game-canvas"
   ) as HTMLCanvasElement;
   private static gameContext = Game.gameCanvas.getContext(
     "2d"
   ) as CanvasRenderingContext2D;
   private static loopTimestamp: number;
-  public static playerScore: number;
-  public static computerScore: number;
-  private static player1: Paddle;
-  private static computerPlayer: ComputerPaddle;
+  static playerScore: number;
+  static computerScore: number;
+  static player1: Paddle;
+  static computerPlayer: Paddle;
   private static ballLaunchTimer: number;
-  private static ball: Ball | null;
+  static ball: Ball | null;
 
   static init(): void {
     Game.gameContext.font = "30px Orbitron";
@@ -33,14 +32,16 @@ export class Game {
       config.paddle.height,
       config.wallOffset,
       Game.gameCanvas.height / 2 - config.paddle.height / 2,
-      config.player.speed
+      config.player.speed,
+      fromUserInput
     );
-    Game.computerPlayer = new ComputerPaddle(
+    Game.computerPlayer = new Paddle(
       config.paddle.width,
       config.paddle.height,
       Game.gameCanvas.width - (config.paddle.width + config.wallOffset),
       Game.gameCanvas.height / 2 - config.paddle.height / 2,
-      config.computer.speed
+      config.computer.speed,
+      followBall
     );
     Game.scheduleBallLaunch(60);
   }
@@ -74,7 +75,7 @@ export class Game {
     ) {
       return true;
     }
-    Game.player1.update(Game.gameCanvas);
+    Game.player1.update();
     if (Game.ball === null) {
       Game.ballLaunchTimer -= 1;
       if (Game.ballLaunchTimer <= 0) {
@@ -89,8 +90,8 @@ export class Game {
         );
       }
     } else {
-      Game.computerPlayer.update(Game.ball, Game.gameCanvas);
-      Game.ball.update(Game.player1, Game.computerPlayer, Game.gameCanvas);
+      Game.computerPlayer.update();
+      Game.ball.update();
     }
     return false;
   }

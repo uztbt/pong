@@ -1,4 +1,3 @@
-import { ComputerPaddle } from "./ComputerPaddle";
 import { config } from "./config";
 import { Players } from "./Players";
 import { Movable } from "./Movable";
@@ -12,7 +11,7 @@ function scale([x1, x2]: [number, number], [y1, y2]: [number, number]) {
     const b = y1 - a * x1;
     return a * x + b;
   }
-};
+}
 
 export class Ball extends Movable {
   private speed: number;
@@ -112,7 +111,7 @@ export class Ball extends Movable {
     }
   }
 
-  updateBasedOnCollision(player: Paddle, computer: ComputerPaddle): void {
+  updateBasedOnCollision(player: Paddle, computer: Paddle): void {
     if (player.x <= this.x && this.x <= player.x + player.width) {
       if (
         this.y <= player.y + player.height &&
@@ -140,11 +139,10 @@ export class Ball extends Movable {
     }
   }
 
-  update(
-    player: Paddle,
-    computer: ComputerPaddle,
-    canvas: HTMLCanvasElement
-  ): void {
+  update(): void {
+    const player = Game.player1;
+    const computer = Game.computerPlayer;
+    const canvas = Game.gameCanvas;
     this.updateBasedOnCanvasBoundary(canvas);
     this.updateBasedOnCollision(player, computer);
     this.x += this.vx;
