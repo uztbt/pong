@@ -1,7 +1,7 @@
 import { Ball } from "./Ball";
-import { Entity } from "./Entity";
+import { Movable } from "./Movable";
 
-export class ComputerPaddle extends Entity {
+export class ComputerPaddle extends Movable {
   private speed: number;
 
   constructor(w: number, h: number, x: number, y: number, speed: number) {

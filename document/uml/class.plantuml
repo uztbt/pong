@@ -1,4 +1,4 @@
-@startuml
+@startuml Pong
 
 ' class index {
 '   userInput
@@ -44,14 +44,9 @@ entity Game {
 
 class Paddle {
   speed
-  updateVelocity(canvas)
-  update(canvas)
-}
-
-class ComputerPaddle {
-  speed
-  updateVelocity(canvas)
-  update(ball, canvas)
+  input()
+  updateVelocity()
+  update()
 }
 
 class Ball {
@@ -59,7 +54,7 @@ class Ball {
   angle, deltaAngle
   lastHitBy
   boundLeftwardScale()
-  boundRightwardScale()
+  ' boundRightwardScale()
   updateVelocity()
   randomAngle()
   ' flipHorizontally()
@@ -69,8 +64,7 @@ class Ball {
   update(player, computer, canvas)
 }
 
-class SideLine {
-  topOrBottom
+class Line {
 }
 
 entity Ending {
@@ -82,11 +76,15 @@ entity Ending {
   loop(timestamp)
 }
 
-abstract Entity {
+abstract Drawable {
   width, height
   x, y
-  vx, vy
   draw(context)
+}
+
+abstract Movable {
+  vx, vy
+  updatePosition()
 }
 
 Opening .> Game
@@ -94,13 +92,14 @@ Game .> Ending
 Ending .> Opening
 
 Game *--- Paddle
-Game *--- ComputerPaddle
 Game *--- Ball
+Game *-- Line
 
-Entity <|-- Paddle
-Entity <|-- ComputerPaddle
-Entity <|-- SideLine
-Entity <|-- Ball
+Drawable <|-- Movable
+Drawable <|-- Line
+
+Movable <|-- Paddle
+Movable <|-- Ball
 
 UserControl <.. Paddle: <<Use>>
 JSON ..> UserControl 

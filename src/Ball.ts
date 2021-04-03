@@ -1,9 +1,10 @@
 import { ComputerPaddle } from "./ComputerPaddle";
 import { config } from "./config";
 import { Players } from "./Players";
-import { Entity } from "./Entity";
+import { Movable } from "./Movable";
 import { Game } from "./Game";
 import { Paddle } from "./Paddle";
+import { Drawable } from "./Drawable";
 
 function scale([x1, x2]: [number, number], [y1, y2]: [number, number]) {
   return (x: number): number => {
@@ -13,7 +14,7 @@ function scale([x1, x2]: [number, number], [y1, y2]: [number, number]) {
   }
 };
 
-export class Ball extends Entity {
+export class Ball extends Movable {
   private speed: number;
   private angle: number;
   private deltaAngle: number;
@@ -79,7 +80,7 @@ export class Ball extends Entity {
     this.updateVelocity();
   }
 
-  private boundByCollision(paddle: Entity) {
+  private boundByCollision(paddle: Drawable) {
     const paddleMiddleY = paddle.y + paddle.height / 2;
     const ballMiddleY = this.y + this.height / 2;
     const dy = ballMiddleY - paddleMiddleY;

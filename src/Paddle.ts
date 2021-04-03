@@ -1,7 +1,7 @@
-import { Entity } from "./Entity";
+import { Movable } from "./Movable";
 import { Command, UserControl } from "./UserControl";
 
-export class Paddle extends Entity {
+export class Paddle extends Movable {
   private speed: number;
 
   constructor(w: number, h: number, x: number, y: number, speed: number) {
