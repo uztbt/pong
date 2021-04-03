@@ -3,6 +3,7 @@ import { Ball } from "./Ball";
 import { Players } from "./Players";
 import { config } from "./config";
 import { Ending } from "./Ending";
+import { Line } from "./Line";
 
 export class Game {
   static gameCanvas = document.getElementById(
@@ -18,6 +19,8 @@ export class Game {
   static computerPlayer: Paddle;
   private static ballLaunchTimer: number;
   static ball: Ball | null;
+  static sideLines: Line[];
+  static endLines: Line[];
 
   static init(): void {
     Game.gameContext.font = "30px Orbitron";
@@ -30,7 +33,7 @@ export class Game {
     Game.player1 = new Paddle(
       config.paddle.width,
       config.paddle.height,
-      config.wallOffset,
+      config.line.offset * 2,
       Game.gameCanvas.height / 2 - config.paddle.height / 2,
       config.player.speed,
       fromUserInput
@@ -38,25 +41,39 @@ export class Game {
     Game.computerPlayer = new Paddle(
       config.paddle.width,
       config.paddle.height,
-      Game.gameCanvas.width - (config.paddle.width + config.wallOffset),
+      Game.gameCanvas.width - (config.paddle.width + config.line.offset * 2),
       Game.gameCanvas.height / 2 - config.paddle.height / 2,
       config.computer.speed,
       followBall
     );
+    Game.sideLines = [
+      new Line(
+        Game.gameCanvas.width - config.line.offset * 2,
+        config.line.width,
+        config.line.offset,
+        config.line.offset - config.line.width),
+      new Line(
+        Game.gameCanvas.width - config.line.offset * 2,
+        config.line.width,
+        config.line.offset,
+        Game.gameCanvas.height - config.line.offset)
+    ];
+    Game.endLines = [
+      new Line(
+        config.line.width,
+        Game.gameCanvas.height - (config.line.offset - config.line.width) * 2,
+        config.line.offset - config.line.width,
+        config.line.offset - config.line.width),
+      new Line(
+        config.line.width,
+        Game.gameCanvas.height - (config.line.offset - config.line.width) * 2,
+        Game.gameCanvas.width - config.line.offset,
+        config.line.offset - config.line.width),
+    ];
     Game.scheduleBallLaunch(60);
   }
 
   static drawBoardDetails(): void {
-    // court outline
-    Game.gameContext.strokeStyle = "#fff";
-    Game.gameContext.lineWidth = 5;
-    Game.gameContext.strokeRect(
-      10,
-      10,
-      Game.gameCanvas.width - 20,
-      Game.gameCanvas.height - 20
-    );
-
     // center line
     for (let i = 0; i < Game.gameCanvas.height - 30; i += 30) {
       Game.gameContext.fillStyle = "#fff";
@@ -105,7 +122,8 @@ export class Game {
       Game.gameCanvas.width,
       Game.gameCanvas.height
     );
-
+    Game.sideLines.forEach(line => line.draw(Game.gameContext));
+    Game.endLines.forEach(line => line.draw(Game.gameContext));
     Game.drawBoardDetails();
     Game.player1.draw(Game.gameContext);
     Game.computerPlayer.draw(Game.gameContext);

@@ -15,7 +15,10 @@ export const config = {
     deltaAngle: Math.PI / 8,
     acceleration: 1.02,
   },
-  wallOffset: 20,
+  line: {
+    offset: 10,
+    width: 5
+  },
   secondsPerFrame: 1000 / 70,
   gamePoint: 3,
 };
