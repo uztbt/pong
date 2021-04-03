@@ -33,7 +33,7 @@ export class Paddle extends Movable {
   update(): void {
     const canvas = Game.gameCanvas;
     this.updateVelocity(canvas);
-    this.y += this.vy;
+    this.updatePosition();
   }
 }
 

@@ -145,7 +145,6 @@ export class Ball extends Movable {
     const canvas = Game.gameCanvas;
     this.updateBasedOnCanvasBoundary(canvas);
     this.updateBasedOnCollision(player, computer);
-    this.x += this.vx;
-    this.y += this.vy;
+    this.updatePosition();
   }
 }

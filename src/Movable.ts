@@ -9,4 +9,9 @@ export abstract class Movable extends Drawable {
     this.vx = 0;
     this.vy = 0;
   }
+
+  updatePosition() {
+    this.x += this.vx;
+    this.y += this.vy;
+  }
 }
