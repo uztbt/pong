@@ -4,6 +4,7 @@ import { Movable } from "./Movable";
 import { Game } from "./Game";
 import { Paddle } from "./Paddle";
 import { Drawable } from "./Drawable";
+import { EndLine, Line } from "./Line";
 
 function scale([x1, x2]: [number, number], [y1, y2]: [number, number]) {
   return (x: number): number => {
@@ -93,58 +94,49 @@ export class Ball extends Movable {
     this.speed *= this.acceleration;
   }
 
-  private updateBasedOnCanvasBoundary(canvas: HTMLCanvasElement) {
-    if (this.y <= 10) {
-      this.flipHorizontally();
-    }
-
-    if (this.y + this.height >= canvas.height - 10) {
-      this.flipHorizontally();
-    }
-
-    if (this.x <= 0) {
-      Game.onScored(Players.COMPUTER);
-    }
-
-    if (this.x + this.width >= canvas.width) {
-      Game.onScored(Players.PLAYER);
+  collisionWithPaddle(paddle: Paddle, player: Players): void {
+    if (this.isCollidingWith(paddle) && this.lastHitBy !== player) {
+      this.lastHitBy = player;
+      this.boundByCollision(paddle);
     }
   }
 
-  updateBasedOnCollision(player: Paddle, computer: Paddle): void {
-    if (player.x <= this.x && this.x <= player.x + player.width) {
-      if (
-        this.y <= player.y + player.height &&
-        this.y + this.height >= player.y
-      ) {
-        if (this.lastHitBy !== Players.PLAYER) {
-          this.boundByCollision(player);
-          this.lastHitBy = Players.PLAYER;
+  private collisionWithSideLines(sideLines: Line[]) {
+    // see. https://yuji.page/axis-aligned-bounding-boxes/
+    sideLines.forEach(sideLine => {
+      if (this.isCollidingWith(sideLine)) {
+        const wasGoingUp = this.vy < 0;
+        if (wasGoingUp) {
+          this.y = sideLine.y + sideLine.height;
+        } else {
+          this.y = sideLine.y - this.height;
+        }
+        this.flipHorizontally();
+      }
+    })
+  }
+
+  private collisionWithEndLines(endLines: EndLine[]) {
+    endLines.forEach(endLine => {
+      if (this.isCollidingWith(endLine)) {
+        if (endLine.ownedBy === Players.PLAYER) {
+          Game.onScored(Players.COMPUTER);
+        } else {
+          Game.onScored(Players.PLAYER);
         }
       }
-    }
-    if (
-      computer.x <= this.x + this.width &&
-      this.x <= computer.x + computer.width
-    ) {
-      if (
-        this.y <= computer.y + computer.height &&
-        this.y + this.height >= computer.y
-      ) {
-        if (this.lastHitBy !== Players.COMPUTER) {
-          this.boundByCollision(computer);
-          this.lastHitBy = Players.COMPUTER;
-        }
-      }
-    }
+    })
   }
 
   update(): void {
     const player = Game.player1;
     const computer = Game.computerPlayer;
-    const canvas = Game.gameCanvas;
-    this.updateBasedOnCanvasBoundary(canvas);
-    this.updateBasedOnCollision(player, computer);
+    const sideLines = Game.sideLines;
+    const endLines = Game.endLines;
+    this.collisionWithSideLines(sideLines);
+    this.collisionWithEndLines(endLines);
+    this.collisionWithPaddle(player, Players.PLAYER);
+    this.collisionWithPaddle(computer, Players.COMPUTER);
     this.updatePosition();
   }
 }

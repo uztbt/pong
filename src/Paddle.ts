@@ -2,7 +2,7 @@ import { Game } from "./Game";
 import { Movable } from "./Movable";
 import { Command, UserControl } from "./UserControl";
 
-type CommandInput = (anything: any) => Set<Command.UP | Command.DOWN>;
+type CommandInput = (paddle: Paddle) => Set<Command.UP | Command.DOWN>;
 export class Paddle extends Movable {
   private speed: number;
   private commandInput: CommandInput;
@@ -13,26 +13,20 @@ export class Paddle extends Movable {
     this.commandInput = commandInput;
   }
 
-  updateVelocity(canvas: HTMLCanvasElement): void {
+  preferredVelocity(): [number, number] {
     const commands = this.commandInput(this);
+    let vy = 0;
     if (commands.has(Command.UP)) {
-      this.vy = -this.speed;
-      if (this.y <= 20) {
-        this.vy = 0;
-      }
+      vy = -this.speed;
     } else if (commands.has(Command.DOWN)) {
-      this.vy = this.speed;
-      if (canvas.height - (this.y + this.height) <= 20) {
-        this.vy = 0;
-      }
-    } else {
-      this.vy = 0;
+      vy = this.speed;
     }
+    return [0, vy];
   }
 
   update(): void {
-    const canvas = Game.gameCanvas;
-    this.updateVelocity(canvas);
+    const [vx, vy] = this.preferredVelocity();
+    this.updateVelocityWithReconciliation(vx, vy, Game.sideLines);
     this.updatePosition();
   }
 }
@@ -58,7 +52,7 @@ export function fromUserInput(paddle: Paddle): Set<Command.UP|Command.DOWN> {
   return commands;
 }
 
-export function followBall (paddle: Paddle) {
+export function followBall (paddle: Paddle): Set<Command.UP | Command.DOWN>{
   const commands = new Set<Command.UP | Command.DOWN>();
   const ball = Game.ball;
   if (ball === null || ball.vx < 0) {

@@ -3,7 +3,7 @@ import { Ball } from "./Ball";
 import { Players } from "./Players";
 import { config } from "./config";
 import { Ending } from "./Ending";
-import { Line } from "./Line";
+import { EndLine, Line } from "./Line";
 
 export class Game {
   static gameCanvas = document.getElementById(
@@ -20,7 +20,7 @@ export class Game {
   private static ballLaunchTimer: number;
   static ball: Ball | null;
   static sideLines: Line[];
-  static endLines: Line[];
+  static endLines: EndLine[];
 
   static init(): void {
     Game.gameContext.font = "30px Orbitron";
@@ -59,16 +59,18 @@ export class Game {
         Game.gameCanvas.height - config.line.offset)
     ];
     Game.endLines = [
-      new Line(
+      new EndLine(
         config.line.width,
         Game.gameCanvas.height - (config.line.offset - config.line.width) * 2,
         config.line.offset - config.line.width,
-        config.line.offset - config.line.width),
-      new Line(
+        config.line.offset - config.line.width,
+        Players.PLAYER),
+      new EndLine(
         config.line.width,
         Game.gameCanvas.height - (config.line.offset - config.line.width) * 2,
         Game.gameCanvas.width - config.line.offset,
-        config.line.offset - config.line.width),
+        config.line.offset - config.line.width,
+        Players.COMPUTER),
     ];
     Game.scheduleBallLaunch(60);
   }
