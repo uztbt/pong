@@ -1,6 +1,8 @@
+import { config } from "./config";
 import { Game } from "./Game";
 import { Movable } from "./Movable";
 import { Command, UserControl } from "./UserControl";
+import { scale } from "./utils";
 
 type CommandInput = (paddle: Paddle) => Set<Command.UP | Command.DOWN | Command.LEFT | Command.RIGHT>;
 export class Paddle extends Movable {
@@ -40,13 +42,14 @@ export function fromUserInput(paddle: Paddle): Set<Command.UP|Command.DOWN|Comma
     commands.add(Command.RIGHT);
   }
   if (UserControl.dict[Command.MOVE]) {
-    const touchY = UserControl.ongoingTouch?.clientY;
-    if (touchY !== undefined) {
-      if (touchY < paddle.y + paddle.height / 2 - 10) {
-        commands.add(Command.UP);
-      } else if (touchY > paddle.y + paddle.height / 2 + 10) {
-        commands.add(Command.DOWN);
-      }
+    const preferredX = scale([1, 100],
+      [config.court.offset+config.line.height, 390-(config.court.offset+config.line.height+config.paddle.width/2)]
+      )(UserControl.scaleValue);
+    console.log(`UserControl.scaleValue = ${UserControl.scaleValue}, preferredX = ${preferredX}`);
+    if (preferredX < paddle.x + paddle.width / 2 - 10) {
+      commands.add(Command.LEFT);
+    } else if (preferredX > paddle.x + paddle.width / 2 + 10) {
+      commands.add(Command.RIGHT);
     }
   }
   return commands;

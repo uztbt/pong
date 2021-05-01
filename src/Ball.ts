@@ -5,14 +5,7 @@ import { Game } from "./Game";
 import { Paddle } from "./Paddle";
 import { Drawable } from "./Drawable";
 import { EndLine, Line } from "./Line";
-
-function scale([x1, x2]: [number, number], [y1, y2]: [number, number]) {
-  return (x: number): number => {
-    const a = (y1 - y2) / (x1 - x2);
-    const b = y1 - a * x1;
-    return a * x + b;
-  }
-}
+import { scale } from "./utils";
 
 export class Ball extends Movable {
   private speed: number;

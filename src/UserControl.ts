@@ -9,6 +9,7 @@ export enum Command {
 export class UserControl {
     static dict: {[C in Command]: boolean};
     static ongoingTouch: {identifier: number, clientX: number, clientY: number} | undefined;
+    static scaleValue: number;
     static init(): void {
         UserControl.dict = {
             [Command.UP]: false,
@@ -29,6 +30,12 @@ export class UserControl {
                 upArrow.addEventListener("touchend", this.handleTouchUpArrowEnd);
                 downArrow.addEventListener("touchstart", this.handleTouchDownArrowStart);
                 downArrow.addEventListener("touchend", this.handleTouchDownArrowEnd);
+            }
+            const playerSlider = document.getElementById("playerSlider") as HTMLInputElement;
+            if (playerSlider !== null) {
+                UserControl.dict[Command.MOVE] = true;
+                playerSlider.addEventListener("input", this.handleSliderInput);
+                this.scaleValue = Number.parseInt(playerSlider.value, 10);
             }
         });
     }
@@ -78,6 +85,14 @@ export class UserControl {
         event.preventDefault();
         UserControl.dict[Command.DOWN] = false;
         UserControl.dict[Command.ENTER] = false;
+    }
+
+    private static handleSliderInput(event: Event) {
+        event.preventDefault();
+        const target = event.target as HTMLInputElement;
+        const scaleValue = Number.parseInt(target.value, 10);
+        console.log(`scaleValue = ${scaleValue}`);
+        UserControl.scaleValue = scaleValue;
     }
 
     private static handleTouchStart(event: TouchEvent) {
