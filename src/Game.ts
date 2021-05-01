@@ -52,13 +52,13 @@ export class Game {
         config.court.offset,
         endlineWidth,
         config.line.height,
-        Players.PLAYER),
+        Players.COMPUTER),
       new EndLine(
         config.court.offset,
         config.court.offset + sidelineWidth - config.line.height,
         endlineWidth,
         config.line.height,
-        Players.COMPUTER),
+        Players.PLAYER),
     ];
 
     Game.player1 = new Paddle(

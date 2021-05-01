@@ -1,7 +1,7 @@
 export const config = {
   paddle: {
     width: 60,
-    height: 30,
+    height: 10,
     offset: 10
   },
   player: {

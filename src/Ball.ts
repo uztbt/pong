@@ -22,6 +22,8 @@ export class Ball extends Movable {
   private lastHitBy: Players | null;
   private boundLeftwardScale: (x: number) => number;
   private boundRightwardScale: (x: number) => number;
+  private boundDownwardScale: (x: number) => number;
+  private boundUpwardScale: (x: number) => number;
 
   constructor(
     w: number,
@@ -46,32 +48,32 @@ export class Ball extends Movable {
       [-config.paddle.height / 2 - h / 2, config.paddle.height / 2 + h / 2],
       [Math.PI / 2 - deltaAngle, -Math.PI / 2 + deltaAngle]
     );
+    this.boundDownwardScale = scale(
+      [-config.paddle.width / 2 - w / 2, config.paddle.width / 2 + w / 2],
+      [Math.PI-deltaAngle, deltaAngle]
+    );
+    this.boundUpwardScale = scale(
+      [-config.paddle.width / 2 - w / 2, config.paddle.width / 2 + w / 2],
+      [Math.PI+deltaAngle, 2*Math.PI-deltaAngle]
+    );
     this.acceleration = acceleration;
   }
 
   private updateVelocity() {
     const uvx = Math.cos(this.angle);
-    // The negation below is very important because the y-axis of the canvas is the opposite of
-    // that of the normal cartesian system, which I used to calculate the reflection.
-    const uvy = -Math.sin(this.angle);
+    const uvy = Math.sin(this.angle);
     this.vx = this.speed * uvx;
     this.vy = this.speed * uvy;
   }
 
   private randomAngle(): number {
-    const a = Math.PI * (Math.random() - 0.5);
-    if (
-      a > Math.PI / 2 - this.deltaAngle ||
-      a < -Math.PI / 2 + this.deltaAngle
-    ) {
-      return this.randomAngle();
-    } else {
-      return a;
-    }
+    const offset = Math.PI + this.deltaAngle;
+    const variable = (Math.PI - 2 * this.deltaAngle) * Math.random();
+    return offset + variable;
   }
 
   private flipHorizontally() {
-    this.angle = 2 * Math.PI - this.angle;
+    this.angle = Math.PI - this.angle;
     this.updateVelocity();
   }
 
@@ -81,14 +83,14 @@ export class Ball extends Movable {
   }
 
   private boundByCollision(paddle: Drawable) {
-    const paddleMiddleY = paddle.y + paddle.height / 2;
-    const ballMiddleY = this.y + this.height / 2;
-    const dy = ballMiddleY - paddleMiddleY;
-    const isIncidentDirectionLeft = this.vx < 0;
-    if (isIncidentDirectionLeft) {
-      this.angle = this.boundRightwardScale(dy);
+    const paddleMiddleX = paddle.x + paddle.width / 2;
+    const ballMiddleX = this.x + this.width / 2;
+    const dx = ballMiddleX - paddleMiddleX;
+    const isIncidentDirectionUp = this.vy < 0;
+    if (isIncidentDirectionUp) {
+      this.angle = this.boundDownwardScale(dx);
     } else {
-      this.angle = this.boundLeftwardScale(dy);
+      this.angle = this.boundUpwardScale(dx);
     }
     this.updateVelocity();
     this.speed *= this.acceleration;
@@ -105,11 +107,11 @@ export class Ball extends Movable {
     // see. https://yuji.page/axis-aligned-bounding-boxes/
     sideLines.forEach(sideLine => {
       if (this.isCollidingWith(sideLine)) {
-        const wasGoingUp = this.vy < 0;
-        if (wasGoingUp) {
-          this.y = sideLine.y + sideLine.height;
+        const isGoingLeft = this.vx < 0;
+        if (isGoingLeft) {
+          this.x = sideLine.x + sideLine.width;
         } else {
-          this.y = sideLine.y - this.height;
+          this.x = sideLine.x - this.width;
         }
         this.flipHorizontally();
       }
