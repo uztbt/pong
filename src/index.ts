@@ -3,12 +3,12 @@ import { Opening } from "./Opening";
 import { UserControl } from "./UserControl";
 
 if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
-  const buttons = document.getElementById("control-buttons");
+  const slider = document.getElementById("sliderContainer");
   console.log("detected as mobile")
-  if (buttons !== null) {
+  if (slider !== null) {
     console.log("not null, so showing!")
-    buttons.style.display = "flex";
-    buttons.hidden = false;
+    slider.style.display = "flex";
+    slider.hidden = false;
   }
 }
 UserControl.init();
