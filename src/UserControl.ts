@@ -1,6 +1,8 @@
 export enum Command {
     UP = "UP",
     DOWN = "DOWN",
+    LEFT = "LEFT",
+    RIGHT = "RIGHT",
     ENTER = "ENTER",
     MOVE = "MOVE"
 }
@@ -11,6 +13,8 @@ export class UserControl {
         UserControl.dict = {
             [Command.UP]: false,
             [Command.DOWN]: false,
+            [Command.LEFT]: false,
+            [Command.RIGHT]: false,
             [Command.ENTER]: false,
             [Command.MOVE]: false
         };
@@ -38,6 +42,12 @@ export class UserControl {
                 break;
             case "ArrowDown":
                 UserControl.dict[Command.DOWN] = isKeyDown;
+                break;
+            case "ArrowLeft":
+                UserControl.dict[Command.LEFT] = isKeyDown;
+                break;
+            case "ArrowRight":
+                UserControl.dict[Command.RIGHT] = isKeyDown;
                 break;
             case "Enter":
                 UserControl.dict[Command.ENTER] = isKeyDown;

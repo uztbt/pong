@@ -32,7 +32,7 @@ export abstract class Movable extends Drawable {
     drawables.forEach(drawable => {
       if (this.willCollide(vx, vy, drawable)) {
         if (vx < 0) {
-          this.vx = Math.max(this.x-drawable.x+drawable.width, vx);
+          this.vx = Math.max(drawable.x+drawable.width - this.x, vx);
         } else if (vx > 0) {
           this.vx = Math.min(drawable.x-(this.x+this.width), vx);
         }

@@ -1,14 +1,14 @@
 export abstract class Drawable {
-  width: number;
-  height: number;
   x: number;
   y: number;
+  width: number;
+  height: number;
 
-  constructor(w: number, h: number, x: number, y: number) {
-    this.width = w;
-    this.height = h;
+  constructor(x: number, y: number, w: number, h: number) {
     this.x = x;
     this.y = y;
+    this.width = w;
+    this.height = h;
   }
 
   draw(context: CanvasRenderingContext2D): void {

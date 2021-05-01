@@ -6,10 +6,10 @@ import { Ending } from "./Ending";
 import { EndLine, Line } from "./Line";
 
 export class Game {
-  static gameCanvas = document.getElementById(
+  static canvas = document.getElementById(
     "game-canvas"
   ) as HTMLCanvasElement;
-  private static gameContext = Game.gameCanvas.getContext(
+  private static gameContext = Game.canvas.getContext(
     "2d"
   ) as CanvasRenderingContext2D;
   private static loopTimestamp: number;
@@ -23,68 +23,91 @@ export class Game {
   static endLines: EndLine[];
 
   static init(): void {
-    Game.gameContext.font = "30px Orbitron";
+    Game.gameContext.font = `${config.points.font.size}px ${config.points.font.name}`;
     Game.loopTimestamp = 0;
     Game.playerScore = 0;
     Game.computerScore = 0;
     Game.ballLaunchTimer = 0;
     Game.ball = null;
 
+    const sidelineWidth = Game.canvas.height - 2 * config.court.offset;
+    const endlineWidth = Game.canvas.width - 2 * config.court.offset;
+    Game.sideLines = [
+      new Line(
+        config.court.offset,
+        config.court.offset,
+        config.line.height,
+        sidelineWidth,
+        ),
+      new Line(
+        config.court.offset + endlineWidth - config.line.height,
+        config.court.offset,
+        config.line.height,
+        sidelineWidth
+        )
+    ];
+    Game.endLines = [
+      new EndLine(
+        config.court.offset,
+        config.court.offset,
+        endlineWidth,
+        config.line.height,
+        Players.PLAYER),
+      new EndLine(
+        config.court.offset,
+        config.court.offset + sidelineWidth - config.line.height,
+        endlineWidth,
+        config.line.height,
+        Players.COMPUTER),
+    ];
+
     Game.player1 = new Paddle(
+      Game.canvas.width / 2 - config.paddle.width / 2,
+      config.court.offset+sidelineWidth
+        -(config.line.height+config.paddle.offset+config.paddle.height),
       config.paddle.width,
       config.paddle.height,
-      config.line.offset * 2,
-      Game.gameCanvas.height / 2 - config.paddle.height / 2,
       config.player.speed,
       fromUserInput
     );
     Game.computerPlayer = new Paddle(
+      Game.canvas.width / 2 - config.paddle.width / 2,
+      config.court.offset + config.line.height + config.paddle.offset,
       config.paddle.width,
       config.paddle.height,
-      Game.gameCanvas.width - (config.paddle.width + config.line.offset * 2),
-      Game.gameCanvas.height / 2 - config.paddle.height / 2,
       config.computer.speed,
       followBall
     );
-    Game.sideLines = [
-      new Line(
-        Game.gameCanvas.width - config.line.offset * 2,
-        config.line.width,
-        config.line.offset,
-        config.line.offset - config.line.width),
-      new Line(
-        Game.gameCanvas.width - config.line.offset * 2,
-        config.line.width,
-        config.line.offset,
-        Game.gameCanvas.height - config.line.offset)
-    ];
-    Game.endLines = [
-      new EndLine(
-        config.line.width,
-        Game.gameCanvas.height - (config.line.offset - config.line.width) * 2,
-        config.line.offset - config.line.width,
-        config.line.offset - config.line.width,
-        Players.PLAYER),
-      new EndLine(
-        config.line.width,
-        Game.gameCanvas.height - (config.line.offset - config.line.width) * 2,
-        Game.gameCanvas.width - config.line.offset,
-        config.line.offset - config.line.width,
-        Players.COMPUTER),
-    ];
+
     Game.scheduleBallLaunch(60);
   }
 
   static drawBoardDetails(): void {
     // center line
-    for (let i = 0; i < Game.gameCanvas.height - 30; i += 30) {
-      Game.gameContext.fillStyle = "#fff";
-      Game.gameContext.fillRect(Game.gameCanvas.width / 2 - 10, i + 10, 15, 20);
+    Game.gameContext.fillStyle = "#fff";
+    const inCourtLength = Game.canvas.width - 2 * (config.court.offset + config.line.height);
+    for (let i = 0; i < inCourtLength / (2 * config.centerLine.width); i++) {
+      Game.gameContext.fillRect(
+        config.court.offset + config.line.height + (2 * i + 0.5) * config.centerLine.width,
+        Game.canvas.height / 2 - config.centerLine.height / 2,
+        config.centerLine.width,
+        config.centerLine.height
+        );
     }
 
     // draw scores
-    Game.gameContext.fillText(Game.playerScore.toString(), Game.gameCanvas.width/2-50, 50);
-    Game.gameContext.fillText(Game.computerScore.toString(), Game.gameCanvas.width/2+20, 50);
+    Game.gameContext.fillText(
+      Game.computerScore.toString(),
+      config.court.offset + config.line.height + config.points.offset.left,
+      Game.canvas.height / 2 -
+        (config.centerLine.height / 2 + config.points.offset.centerLine)  
+      );
+    Game.gameContext.fillText(
+      Game.playerScore.toString(),
+      config.court.offset + config.line.height + config.points.offset.left,
+      Game.canvas.height / 2 + config.centerLine.height / 2 +
+        config.points.font.size
+    );
   }
 
   static update(): boolean {
@@ -99,10 +122,10 @@ export class Game {
       Game.ballLaunchTimer -= 1;
       if (Game.ballLaunchTimer <= 0) {
         Game.ball = new Ball(
+          Game.canvas.width / 2 - config.ball.size / 2,
+          Game.canvas.height / 2 - config.ball.size / 2,
           config.ball.size,
           config.ball.size,
-          Game.gameCanvas.width / 2 - config.ball.size / 2,
-          Game.gameCanvas.height / 2 - config.ball.size / 2,
           config.ball.speed,
           config.ball.deltaAngle,
           config.ball.acceleration
@@ -121,8 +144,8 @@ export class Game {
     Game.gameContext.fillRect(
       0,
       0,
-      Game.gameCanvas.width,
-      Game.gameCanvas.height
+      Game.canvas.width,
+      Game.canvas.height
     );
     Game.sideLines.forEach(line => line.draw(Game.gameContext));
     Game.endLines.forEach(line => line.draw(Game.gameContext));

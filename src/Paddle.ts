@@ -2,26 +2,26 @@ import { Game } from "./Game";
 import { Movable } from "./Movable";
 import { Command, UserControl } from "./UserControl";
 
-type CommandInput = (paddle: Paddle) => Set<Command.UP | Command.DOWN>;
+type CommandInput = (paddle: Paddle) => Set<Command.UP | Command.DOWN | Command.LEFT | Command.RIGHT>;
 export class Paddle extends Movable {
   private speed: number;
   private commandInput: CommandInput;
 
-  constructor(w: number, h: number, x: number, y: number, speed: number, commandInput: CommandInput) {
-    super(w, h, x, y);
+  constructor(x: number, y: number, w: number, h: number, speed: number, commandInput: CommandInput) {
+    super(x, y, w, h);
     this.speed = speed;
     this.commandInput = commandInput;
   }
 
   preferredVelocity(): [number, number] {
     const commands = this.commandInput(this);
-    let vy = 0;
-    if (commands.has(Command.UP)) {
-      vy = -this.speed;
-    } else if (commands.has(Command.DOWN)) {
-      vy = this.speed;
+    let vx = 0;
+    if (commands.has(Command.LEFT)) {
+      vx = -this.speed;
+    } else if (commands.has(Command.RIGHT)) {
+      vx = this.speed;
     }
-    return [0, vy];
+    return [vx, 0];
   }
 
   update(): void {
@@ -31,13 +31,13 @@ export class Paddle extends Movable {
   }
 }
 
-export function fromUserInput(paddle: Paddle): Set<Command.UP|Command.DOWN> {
-  const commands = new Set<Command.UP | Command.DOWN>();
-  if (UserControl.dict[Command.UP]) {
-    commands.add(Command.UP);
+export function fromUserInput(paddle: Paddle): Set<Command.UP|Command.DOWN|Command.LEFT|Command.RIGHT> {
+  const commands = new Set<Command.UP | Command.DOWN | Command.LEFT | Command.RIGHT>();
+  if (UserControl.dict[Command.LEFT]) {
+    commands.add(Command.LEFT);
   }
-  if (UserControl.dict[Command.DOWN]) {
-    commands.add(Command.DOWN);
+  if (UserControl.dict[Command.RIGHT]) {
+    commands.add(Command.RIGHT);
   }
   if (UserControl.dict[Command.MOVE]) {
     const touchY = UserControl.ongoingTouch?.clientY;
@@ -52,16 +52,16 @@ export function fromUserInput(paddle: Paddle): Set<Command.UP|Command.DOWN> {
   return commands;
 }
 
-export function followBall (paddle: Paddle): Set<Command.UP | Command.DOWN>{
-  const commands = new Set<Command.UP | Command.DOWN>();
+export function followBall (paddle: Paddle): Set<Command.UP|Command.DOWN|Command.LEFT|Command.RIGHT>{
+  const commands = new Set<Command.UP|Command.DOWN|Command.LEFT|Command.RIGHT>();
   const ball = Game.ball;
-  if (ball === null || ball.vx < 0) {
+  if (ball === null || ball.vy > 0) {
     return commands;
   }
-  if (ball.y < paddle.y) {
-    commands.add(Command.UP);
-  } else if (ball.y + ball.height > paddle.y + paddle.height) {
-    commands.add(Command.DOWN);
+  if (ball.x + ball.width < paddle.x) {
+    commands.add(Command.LEFT);
+  } else if (ball.x > paddle.x + paddle.width) {
+    commands.add(Command.RIGHT);
   }
   return commands;
 }
