@@ -8,12 +8,12 @@ export const config = {
     speed: 7,
   },
   computer: {
-    speed: 7,
+    speed: 6,
   },
   ball: {
     size: 10,
     speed: 8,
-    deltaAngle: Math.PI / 8,
+    deltaAngle: Math.PI / 6,
     acceleration: 1.02,
   },
   court: {

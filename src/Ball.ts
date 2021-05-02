@@ -19,15 +19,15 @@ export class Ball extends Movable {
   private boundUpwardScale: (x: number) => number;
 
   constructor(
-    w: number,
-    h: number,
     x: number,
     y: number,
+    w: number,
+    h: number,
     speed: number,
     deltaAngle: number,
     acceleration: number
   ) {
-    super(w, h, x, y);
+    super(x, y, w, h);
     this.speed = speed;
     this.deltaAngle = deltaAngle;
     this.angle = this.randomAngle();
@@ -60,8 +60,8 @@ export class Ball extends Movable {
   }
 
   private randomAngle(): number {
-    const offset = Math.PI + this.deltaAngle;
-    const variable = (Math.PI - 2 * this.deltaAngle) * Math.random();
+    const offset = Math.PI + 2 * this.deltaAngle;
+    const variable = (Math.PI - 4 * this.deltaAngle) * Math.random();
     return offset + variable;
   }
 

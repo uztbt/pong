@@ -36,9 +36,8 @@ export class UserControl {
             }
             const playerSlider = document.getElementById("playerSlider") as HTMLInputElement;
             if (playerSlider !== null) {
-                UserControl.dict[Command.MOVE] = true;
-                playerSlider.addEventListener("input", this.handleSliderInput);
-                this.scaleValue = Number.parseInt(playerSlider.value, 10);
+                playerSlider.addEventListener("input", this.handleSliderInputStart);
+                playerSlider.addEventListener("touchend", this.handleSliderInputEnd);
             }
         });
     }
@@ -100,12 +99,17 @@ export class UserControl {
         UserControl.dict[Command.ENTER] = false;
     }
 
-    private static handleSliderInput(event: Event) {
+    private static handleSliderInputStart(event: Event) {
         event.preventDefault();
         const target = event.target as HTMLInputElement;
         const scaleValue = Number.parseInt(target.value, 10);
-        console.log(`scaleValue = ${scaleValue}`);
+        UserControl.dict[Command.MOVE] = true;
         UserControl.scaleValue = scaleValue;
+    }
+
+    private static handleSliderInputEnd(event: Event) {
+        event.preventDefault();
+        UserControl.dict[Command.MOVE] = false;
     }
 
     private static handleTouchStart(event: TouchEvent) {

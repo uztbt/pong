@@ -4,8 +4,8 @@ export abstract class Movable extends Drawable {
   vx: number;
   vy: number;
 
-  constructor(w: number, h: number, x: number, y: number) {
-    super(w, h, x, y);
+  constructor(x: number, y: number, w: number, h: number) {
+    super(x, y, w, h);
     this.vx = 0;
     this.vy = 0;
   }
