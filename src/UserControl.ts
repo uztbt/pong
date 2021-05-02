@@ -22,6 +22,9 @@ export class UserControl {
         document.addEventListener("DOMContentLoaded", () => {
             document.addEventListener("keydown", UserControl.registerKeyInput(true));
             document.addEventListener("keyup", UserControl.registerKeyInput(false));
+            const canvas = document.getElementById("game-canvas");
+            canvas?.addEventListener("touchstart", this.handleTouchCanvasStart);
+            canvas?.addEventListener("touchend", this.handleTouchCanvasEnd);
 
             const upArrow = document.getElementById("up-arrow") as HTMLImageElement;
             const downArrow = document.getElementById("down-arrow") as HTMLImageElement;
@@ -61,6 +64,16 @@ export class UserControl {
                 break;
             }
         }
+    }
+
+    private static handleTouchCanvasStart(event: TouchEvent) {
+        event.preventDefault();
+        UserControl.dict[Command.ENTER] = true;
+    }
+    
+    private static handleTouchCanvasEnd(event: TouchEvent) {
+        event.preventDefault();
+        UserControl.dict[Command.ENTER] = false;
     }
 
     private static handleTouchUpArrowStart(event: TouchEvent) {
