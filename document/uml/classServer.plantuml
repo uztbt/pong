@@ -1,0 +1,82 @@
+@startuml
+
+title "Class Diagram of Pong++ Server"
+
+package Server {
+    package State {
+        abstract State {
+            player1
+            player2
+            sendUI()
+        }
+
+        class Opening {
+          update(): boolean
+          loop(timestamp)
+        }
+
+        class Game {
+        ballLaunchTimer
+        onScored(entity)
+        scheduleBallLaunch(frames)
+        update(): boolean
+        loop(timestamp)
+        }
+
+        class Ending {
+        }
+
+        State <|-- Opening
+        State <|-- Game
+        State <|-- Ending
+
+        class Paddle {
+        speed
+        input()
+        updateVelocity()
+        update()
+        }
+
+        class Ball {
+        speed, acceleration
+        angle, deltaAngle
+        lastHitBy
+        boundLeftwardScale()
+        ' boundRightwardScale()
+        updateVelocity()
+        randomAngle()
+        ' flipHorizontally()
+        ' boundByCollision(paddle)
+        updateBasedOnCanvasBoundary(canvas)
+        updateBasedOnCollision(paddle, computer)
+        update(player, computer, canvas)
+        }
+
+        class Line {
+        }
+
+        abstract "Drawable"  as DrawableServer {
+        width, height
+        x, y
+        type
+        draw()
+        }
+
+        abstract Movable {
+        vx, vy
+        updatePosition()
+        }
+
+        Game *--- Paddle
+        Game *--- Ball
+        Game *-- Line
+
+        DrawableServer <|-- Movable
+        DrawableServer <|-- Line
+
+        Movable <|-- Paddle
+        Movable <|-- Ball
+    }
+}
+
+@enduml

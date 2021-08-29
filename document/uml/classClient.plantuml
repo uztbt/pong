@@ -1,0 +1,42 @@
+@startuml
+
+title "Class Diagram of Pong++ Client"
+
+package "Client" {
+    package "User Input" {
+        class CommandBuffer {
+            commandBuffer: Command
+            intervalID: number
+            sendCommand()
+        }
+
+        Enum Command {
+            Idle
+            Enter
+            Left
+            Right
+        }
+
+        CommandBuffer . Command
+    }
+
+    package Rendering {
+        abstract "Drawable" as DrawableClient {
+            width, height
+            x, y
+            type
+            draw()
+        }
+        class Circle {}
+        class Rect {}
+        DrawableClient <|-- Circle
+        DrawableClient <|-- Rect
+        class DrawableBuffer {
+            drawables
+            draw()
+        }
+        DrawableBuffer . DrawableClient
+    }
+}
+
+@enduml
