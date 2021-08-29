@@ -1,0 +1,20 @@
+@startuml
+
+title "Component Diagram of Pong++"
+
+package Server {
+    folder "Process" as serverProcess {
+        [Game State Management]
+        Command -left- [Game State Management]
+    }
+}
+
+package Client {
+    folder "Process" as clientProcess {
+        [Rendering] -right- UI
+        [Game State Management] -down-> UI
+        [User Input] -up-> Command
+    }
+}
+
+@enduml
