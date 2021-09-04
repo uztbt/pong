@@ -1,11 +1,15 @@
 @startuml
 
-title "Component Diagram of Pong++"
+title "Component Diagram of JaPong"
 
 package Server {
     folder "Process" as serverProcess {
         [Game State Management]
-        Command -left- [Game State Management]
+        interface "Command" as GamaStateManagementCommand
+        [Game State Management] -- GamaStateManagementCommand
+        [Room Management]
+        interface "Request" as RoomManagementCommand
+        [Room Management] -- RoomManagementCommand
     }
 }
 
@@ -13,7 +17,9 @@ package Client {
     folder "Process" as clientProcess {
         [Rendering] -right- UI
         [Game State Management] -down-> UI
-        [User Input] -up-> Command
+        [Room Management] - UI
+        [User Input] -up-> GamaStateManagementCommand
+        [User Input] -up-> RoomManagementCommand
     }
 }
 

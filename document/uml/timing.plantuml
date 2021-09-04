@@ -1,55 +1,51 @@
 @startuml
 
-title "Timing Diagtam of Pong++"
+title "Timing Diagtam of JaPong"
 
-robust Server
-Concise Client
+concise Server
+concise Client
 
 @0
 Server is State0
 Client is Idle
 
-@10
-Server -> Client@+10: UI
+@1
+Server -> Client@+5: UI
 
-@30
+@4
 Client is Right
-Client -> Server@+10: Right
 
-@40
-Client -> Server@+10: Right
+@8
+Client -> Server@+5: Right
 
-@50
-Client -> Server@+10: Right
-
-@60
+@16
 Server is State1
-Client -> Server@+10: Right
+Client -> Server@+1: Right
 
-@70
-Server -> Client@+10: UI
+@7
+Server -> Client@+1: UI
 Client is Left
-Client -> Server@+10: Left
+Client -> Server@+1: Left
 
-@80
-Client -> Server@+10: Left
+@8
+Client -> Server@+1: Left
 
-@90
-Client -> Server@+10: Left
+@9
+Client -> Server@+1: Left
 
-@100
+@10
 Client is Right
-Client -> Server@+10: Right
+Client -> Server@+1: Right
 
-@110
-Client -> Server@+10: Right
+@11
+Client -> Server@+1: Right
 
-@120
+@12
 Server is State2
 Client is Idle
 
-@130
-Server -> Client@+10: UI
+@13
+Server -> Client@+1: UI
 
-@140
+@14
 @enduml

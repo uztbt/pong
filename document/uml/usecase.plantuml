@@ -1,6 +1,6 @@
 @startuml
 
-title "Use case diagram of Pong++"
+title "Use case diagram of JaPong"
 
 left to right direction
 actor Player
@@ -13,7 +13,7 @@ Player -- Socialize
 Socialize -- LiveStream
 Socialize -- Tournament
 
-package "Pong++" {
+package "JaPong" {
     usecase "Kill time" as KillTime
     usecase "Have Fun" as Fun
     usecase "Play Pong on the web" as Pong

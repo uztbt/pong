@@ -11,6 +11,11 @@ body {
 #game-wrapper{
   width: 390px;
 }
+
+.playerLabel {
+  font: bold 30px Orbitron;
+}
+
 canvas{
   display: block;
   margin: 0px auto;

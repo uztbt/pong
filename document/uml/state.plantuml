@@ -3,7 +3,7 @@
 left to right direction
 hide empty description
 
-title "State Diagram of Pong++ Server"
+title "State Diagram of JaPong Server"
 
 state "Waiting for Player 1" as Wait1P
 state "Waiting for Player 2" as Wait2P

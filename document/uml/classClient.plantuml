@@ -1,23 +1,28 @@
 @startuml
 
-title "Class Diagram of Pong++ Client"
+title "Class Diagram of JaPong Client"
 
 package "Client" {
     package "User Input" {
+        interface Transmitter {
+            send()
+        }
+
         class CommandBuffer {
-            commandBuffer: Command
+            dict: CommandDict
             intervalID: number
+            transmitter
             sendCommand()
         }
 
+        CommandBuffer *-- Transmitter
+        CommandBuffer *-- Command
         Enum Command {
             Idle
             Enter
             Left
             Right
         }
-
-        CommandBuffer . Command
     }
 
     package Rendering {

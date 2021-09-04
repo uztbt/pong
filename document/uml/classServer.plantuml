@@ -1,20 +1,20 @@
 @startuml
 
-title "Class Diagram of Pong++ Server"
+title "Class Diagram of JaPong Server"
 
 package Server {
-    package State {
-        abstract State {
-            player1
-            player2
-            sendUI()
+    package "Room Management" as RoomManagement {
+        class RoomManagement {
+            onGameOver()
         }
-
-        class Opening {
-          update(): boolean
-          loop(timestamp)
+        class "Game Room" as GameRoom {
+            game: Game | null
+            sockets: Socket[]
+            commandDicts: CommandDictionary[]
         }
-
+        RoomManagement *-- GameRoom
+    }
+    package "Game State Management" as GameStateManagement {
         class Game {
         ballLaunchTimer
         onScored(entity)
@@ -22,13 +22,6 @@ package Server {
         update(): boolean
         loop(timestamp)
         }
-
-        class Ending {
-        }
-
-        State <|-- Opening
-        State <|-- Game
-        State <|-- Ending
 
         class Paddle {
         speed
@@ -58,8 +51,7 @@ package Server {
         abstract "Drawable"  as DrawableServer {
         width, height
         x, y
-        type
-        draw()
+        serialize()
         }
 
         abstract Movable {

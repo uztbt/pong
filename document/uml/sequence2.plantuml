@@ -1,6 +1,6 @@
 @startuml
 
-title "Sequence Diagram of Pong++ 2"
+title "Sequence Diagram of JaPong 2"
 
 participant "Client 1" as Client1
 participant Server

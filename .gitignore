@@ -2,3 +2,4 @@
 node_modules
 dist/javascript/pong.js
 .DS_Store
+out
