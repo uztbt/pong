@@ -1,0 +1,52 @@
+@startuml
+
+title "Class Diagram of JaPong Client"
+
+package "Client" {
+    package "User Input" {
+        interface Transmitter {
+            send()
+        }
+
+        class CommandBuffer {
+            dict: CommandDict
+            intervalID: number
+            transmitter
+            sendCommand()
+        }
+
+        class SocketIOTransmitter {
+
+        }
+
+        CommandBuffer *-- Transmitter
+        CommandBuffer *-- Command
+        Enum Command {
+            Idle
+            Enter
+            Left
+            Right
+        }
+        Transmitter <|-- SocketIOTransmitter
+    }
+
+    package Rendering {
+        abstract "Drawable" as DrawableClient {
+            width, height
+            x, y
+            type
+            draw()
+        }
+        class Circle {}
+        class Rect {}
+        DrawableClient <|-- Circle
+        DrawableClient <|-- Rect
+        class DrawableBuffer {
+            drawables
+            draw()
+        }
+        DrawableBuffer . DrawableClient
+    }
+}
+
+@enduml

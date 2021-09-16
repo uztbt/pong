@@ -1,0 +1,51 @@
+@startuml
+
+title "Timing Diagtam of JaPong"
+
+concise Server
+concise Client
+
+@0
+Server is State0
+Client is Idle
+
+@1
+Server -> Client@+5: UI
+
+@4
+Client is Right
+
+@8
+Client -> Server@+5: Right
+
+@16
+Server is State1
+Client -> Server@+1: Right
+
+@7
+Server -> Client@+1: UI
+Client is Left
+Client -> Server@+1: Left
+
+@8
+Client -> Server@+1: Left
+
+@9
+Client -> Server@+1: Left
+
+@10
+Client is Right
+Client -> Server@+1: Right
+
+@11
+Client -> Server@+1: Right
+
+@12
+Server is State2
+Client is Idle
+
+@13
+Server -> Client@+1: UI
+
+@14
+@enduml

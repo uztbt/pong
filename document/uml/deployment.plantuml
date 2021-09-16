@@ -1,0 +1,18 @@
+@startuml
+
+actor Player
+cloud "GCP us-central1-a" {
+  node "Virtual Machine" {
+    component "Blog Server" as Blog
+    component "JaPong Server" as JaPong {
+      component "Room Management" as RoomManagement
+      component "Game Management" as GameManagement
+    }
+  }
+}
+
+Blog <-- Player: 1
+RoomManagement <-- Player: 2
+GameManagement <-- Player: 3
+
+@enduml

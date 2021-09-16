@@ -1,0 +1,25 @@
+@startuml
+
+title "Sequence Diagram of JaPong 2"
+
+participant "Client 1" as Client1
+participant Server
+participant "Client 2" as Client2
+
+loop Game loop
+Client1 --> Server: command: RIGHT
+Client2 --> Server: command: LEFT
+Server --> Server: Update state
+Server --> Client1: drawables
+Server --> Client2: drawables
+Client1 --> Client1: Draw
+Client2 --> Client2: Draw
+end
+
+== Game Over ==
+
+Server --> Client1: gameOver: scores
+Server --> Client2: gameOver: scores
+
+
+@enduml

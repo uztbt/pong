@@ -1,0 +1,40 @@
+@startuml
+
+title "Use case diagram of JaPong"
+
+left to right direction
+actor Player
+
+usecase Socialize
+usecase "Share Playback" as LiveStream
+usecase "Hold a tournament" as Tournament
+
+Player -- Socialize
+Socialize -- LiveStream
+Socialize -- Tournament
+
+package "JaPong" {
+    usecase "Kill time" as KillTime
+    usecase "Have Fun" as Fun
+    usecase "Play Pong on the web" as Pong
+    
+    Player -- KillTime
+    Player -- Fun
+    KillTime -- Pong
+    Fun -- Pong
+    rectangle Alone {
+        usecase "With somebody else" as RandomMatch
+        note right of RandomMatch : 2nd
+        usecase "With CPU" as CPU
+        note right of CPU : 1st
+        Pong -- RandomMatch
+        Pong -- CPU
+    }
+    rectangle "With Frineds" {
+        usecase "With frineds" as WithFriends
+        note right of WithFriends : 3rd
+        Pong -- WithFriends
+    }
+}
+
+@enduml

@@ -1,0 +1,25 @@
+@startuml
+
+title "Sequence Diagram of JaPong 1"
+
+participant "Client 1" as Client1
+participant Server
+participant "Client 2" as Client2
+
+== Initialization ==
+
+Client1 -> Server: ready
+return playerId: 1
+Client2 -> Server: ready
+return playerId: 2
+
+== Count Down ==
+
+Server -> Client1: countDown: 3
+Server -> Client2: countDown: 3
+Server -> Client1: countDown: 2
+Server -> Client2: countDown: 2
+Server -> Client1: countDown: 1
+Server -> Client2: countDown: 1
+
+@enduml

@@ -1,0 +1,73 @@
+@startuml
+
+title "Class Diagram of JaPong Server"
+
+package Server {
+    package "Room Management" as RoomManagement {
+        class RoomManagement {
+            onGameOver()
+        }
+        class "Game Room" as GameRoom {
+            game: Game | null
+            sockets: Socket[]
+        }
+        RoomManagement *-- GameRoom
+    }
+    package "Game State Management" as GameStateManagement {
+        class Game {
+        ballLaunchTimer
+        onScored(entity)
+        scheduleBallLaunch(frames)
+        update(): boolean
+        loop(timestamp)
+        }
+
+        class Paddle {
+        speed
+        input()
+        updateVelocity()
+        update()
+        }
+
+        class Ball {
+        speed, acceleration
+        angle, deltaAngle
+        lastHitBy
+        boundLeftwardScale()
+        ' boundRightwardScale()
+        updateVelocity()
+        randomAngle()
+        ' flipHorizontally()
+        ' boundByCollision(paddle)
+        updateBasedOnCanvasBoundary(canvas)
+        updateBasedOnCollision(paddle, computer)
+        update(player, computer, canvas)
+        }
+
+        class Line {
+        }
+
+        abstract "Drawable"  as DrawableServer {
+        width, height
+        x, y
+        serialize()
+        }
+
+        abstract Movable {
+        vx, vy
+        updatePosition()
+        }
+
+        Game *--- Paddle
+        Game *--- Ball
+        Game *-- Line
+
+        DrawableServer <|-- Movable
+        DrawableServer <|-- Line
+
+        Movable <|-- Paddle
+        Movable <|-- Ball
+    }
+}
+
+@enduml

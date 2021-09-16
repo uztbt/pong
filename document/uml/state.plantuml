@@ -1,0 +1,23 @@
+@startuml
+
+left to right direction
+hide empty description
+
+title "State Diagram of JaPong Server"
+
+state "Waiting for Player 1" as Wait1P
+state "Waiting for Player 2" as Wait2P
+state "Count down" as CountDown
+state "Idle" as Idle
+state "Update state" as UpdateState
+state "Show result" as ShowResult
+
+[*] -> Wait1P
+Wait1P -> Wait2P: Player 1 enters
+Wait2P -> CountDown: Player 2 enters
+CountDown --> Idle: 3 seconds
+Idle -> UpdateState
+UpdateState -> Idle
+UpdateState --> ShowResult: on Game Over
+ShowResult -> [*]
+@enduml
