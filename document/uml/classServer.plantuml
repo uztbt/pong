@@ -10,7 +10,6 @@ package Server {
         class "Game Room" as GameRoom {
             game: Game | null
             sockets: Socket[]
-            commandDicts: CommandDictionary[]
         }
         RoomManagement *-- GameRoom
     }
